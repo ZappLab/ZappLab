@@ -22,7 +22,6 @@ public class LongEventMain {
         final Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, executor, ProducerType.SINGLE, new BlockingWaitStrategy());
 
         // Connect the handler
-//        disruptor.handleEventsWith((event, sequence, endOfBatch) -> System.out.println("Event: " + event.getValue()));
         disruptor.handleEventsWith(new LongEventHandler());
 
 
