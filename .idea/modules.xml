@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/jahop.iml" filepath="$PROJECT_DIR$/jahop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jahop-api/jahop-api.iml" filepath="$PROJECT_DIR$/jahop-api/jahop-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jahop-common/jahop-common.iml" filepath="$PROJECT_DIR$/jahop-common/jahop-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jahop-server/jahop-server.iml" filepath="$PROJECT_DIR$/jahop-server/jahop-server.iml" />
     </modules>
   </component>
 </project>

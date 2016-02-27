@@ -1,2 +1,2 @@
-rootProject.name = 'disruptor'
-
+rootProject.name = 'jahop'
+include "jahop-api", "jahop-common", "jahop-server"
