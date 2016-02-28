@@ -4,10 +4,21 @@ sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
+    flatDir {
+        name "localRepository"
+        dirs "../local-repository"
+    }
     mavenCentral()
     maven { url "http://repo.spring.io/libs-snapshot" }
 }
 
+uploadArchives {
+    repositories {
+        add project.repositories.localRepository
+    }
+}
+
 dependencies {
     testCompile("junit:junit:4.+")
+    compile("jahop:jahop-common:+")
 }

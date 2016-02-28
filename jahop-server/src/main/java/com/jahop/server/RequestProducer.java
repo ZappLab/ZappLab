@@ -6,7 +6,7 @@ import com.lmax.disruptor.RingBuffer;
 
 import java.nio.ByteBuffer;
 
-public class ServerEventProducer {
+public class RequestProducer {
     private static final EventTranslatorOneArg<Request, ByteBuffer> TRANSLATOR = (event, sequence, bb) -> {
         event.setSeqNo(bb.getLong(0));
         event.setSourceId(bb.getLong(8));
@@ -14,7 +14,7 @@ public class ServerEventProducer {
 
     private final RingBuffer<Request> ringBuffer;
 
-    public ServerEventProducer(final RingBuffer<Request> ringBuffer) {
+    public RequestProducer(final RingBuffer<Request> ringBuffer) {
         this.ringBuffer = ringBuffer;
     }
 
