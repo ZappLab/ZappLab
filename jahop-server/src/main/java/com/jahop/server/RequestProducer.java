@@ -1,15 +1,12 @@
 package com.jahop.server;
 
-import com.jahop.common.msg.Request;
+import com.jahop.common.msg.Payload;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 
-import java.nio.ByteBuffer;
-
 public class RequestProducer {
-    private static final EventTranslatorOneArg<Request, ByteBuffer> TRANSLATOR = (event, sequence, bb) -> {
-        event.setSeqNo(bb.getLong(0));
-        event.setSourceId(bb.getLong(8));
+    private static final EventTranslatorOneArg<Request, Payload> TRANSLATOR = (event, sequence, payload) -> {
+        event.setData(payload.getData().get());
     };
 
     private final RingBuffer<Request> ringBuffer;
@@ -18,7 +15,7 @@ public class RequestProducer {
         this.ringBuffer = ringBuffer;
     }
 
-    public void onData(ByteBuffer bb) {
-        ringBuffer.publishEvent(TRANSLATOR, bb);
+    public void onData(final Payload payload) {
+        ringBuffer.publishEvent(TRANSLATOR, payload);
     }
 }

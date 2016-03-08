@@ -1,7 +1,6 @@
 package com.jahop.server;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.jahop.common.msg.Request;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.dsl.Disruptor;

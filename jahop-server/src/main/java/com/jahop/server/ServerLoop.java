@@ -1,5 +1,7 @@
 package com.jahop.server;
 
+import com.jahop.common.msg.Payload;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.StandardSocketOptions;
@@ -17,7 +19,7 @@ public class ServerLoop {
     private static final int DEFAULT_PORT = 9090;
 
     private final ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
-
+    private final Payload payload = new Payload();
     private final RequestProducer producer;
     private final int port;
     private final Selector selector;
@@ -100,7 +102,10 @@ public class ServerLoop {
             return;
         }
 
-        producer.onData(readBuffer);
+        readBuffer.flip();
+        payload.read(readBuffer);
+        System.out.println(payload);
+        producer.onData(payload);
 
 //        socketChannel.register(selector, SelectionKey.OP_WRITE);
 //
