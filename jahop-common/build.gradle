@@ -1,7 +1,28 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.google.protobuf:protobuf-gradle-plugin:0.7.5")
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
 
 sourceCompatibility = 1.8
 version = '1.0'
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/proto'
+        }
+        java {
+            srcDirs 'src/main/java', 'generated/main/java'
+        }
+    }
+}
 
 jar {
     manifest {
@@ -20,9 +41,18 @@ uploadArchives {
 
 repositories {
     mavenCentral()
-    maven { url "http://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
     testCompile("junit:junit:4.+")
+    compile("com.google.protobuf:protobuf-java:2.6.1")
+}
+
+protobuf {
+    // Configure the protoc executable
+    protoc {
+        // Download from repositories
+        artifact = "com.google.protobuf:protoc:2.6.1"
+    }
+    generatedFilesBaseDir = "$projectDir/generated"
 }

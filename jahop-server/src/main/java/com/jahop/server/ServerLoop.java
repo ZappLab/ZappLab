@@ -1,5 +1,6 @@
 package com.jahop.server;
 
+import com.google.protobuf.CodedInputStream;
 import com.jahop.common.msg.Payload;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ public class ServerLoop {
     private static final int DEFAULT_PORT = 9090;
 
     private final ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
-    private final Payload payload = new Payload();
     private final RequestProducer producer;
     private final int port;
     private final Selector selector;
@@ -103,9 +103,8 @@ public class ServerLoop {
         }
 
         readBuffer.flip();
-        payload.read(readBuffer);
-        System.out.println(payload);
-        producer.onData(payload);
+        System.out.println("Available: " + readBuffer.remaining());
+        producer.onData(readBuffer);
 
 //        socketChannel.register(selector, SelectionKey.OP_WRITE);
 //

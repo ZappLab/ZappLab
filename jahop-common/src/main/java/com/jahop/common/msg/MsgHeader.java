@@ -1,7 +1,7 @@
 package com.jahop.common.msg;
 
 public final class MsgHeader {
-    //Header size is 24 bytes
+    public static final int SIZE = 24;  //Header size is 24 bytes
     private short msgType;              //  pos=0, size=2
     private short msgVersion;           //  pos=2, size=2
     private int sourceId;               //  pos=4, size=4

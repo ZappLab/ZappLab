@@ -2,7 +2,8 @@ package com.jahop.common.msg;
 
 import java.nio.ByteBuffer;
 
-public class Ack extends Message {
+public final class Ack extends Message {
+    public static final int SIZE = MsgHeader.SIZE + 8;
     private long requestId;
 
     public long getRequestId() {

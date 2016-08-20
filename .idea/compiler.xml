@@ -18,6 +18,15 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jahop-api_main" target="1.8" />
+      <module name="jahop-api_test" target="1.8" />
+      <module name="jahop-common_main" target="1.8" />
+      <module name="jahop-common_test" target="1.8" />
+      <module name="jahop-server_main" target="1.8" />
+      <module name="jahop-server_test" target="1.8" />
+      <module name="jahop_main" target="1.8" />
+      <module name="jahop_test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
-

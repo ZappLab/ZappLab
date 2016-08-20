@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/jahop.iml" filepath="$PROJECT_DIR$/jahop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jahop-api/jahop-api.iml" filepath="$PROJECT_DIR$/jahop-api/jahop-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jahop-common/jahop-common.iml" filepath="$PROJECT_DIR$/jahop-common/jahop-common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jahop-server/jahop-server.iml" filepath="$PROJECT_DIR$/jahop-server/jahop-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-api/jahop-api.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-api/jahop-api.iml" group="jahop-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-api/jahop-api_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-api/jahop-api_main.iml" group="jahop-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-api/jahop-api_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-api/jahop-api_test.iml" group="jahop-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common.iml" group="jahop-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_main.iml" group="jahop-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_test.iml" group="jahop-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server.iml" group="jahop-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_main.iml" group="jahop-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_test.iml" group="jahop-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop_main.iml" group="jahop" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop_test.iml" group="jahop" />
     </modules>
   </component>
 </project>
-

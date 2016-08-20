@@ -20,5 +20,9 @@ uploadArchives {
 
 dependencies {
     testCompile("junit:junit:4.+")
-    compile("jahop:jahop-common:+")
+    compile project(":jahop-common")
+    compile("com.google.protobuf:protobuf-java:2.6.1")
+    compile("org.codehaus.groovy:groovy:2.4.7")
+    compile("org.springframework:spring-core:4.+")
+    compile("org.springframework:spring-context:4.+")
 }

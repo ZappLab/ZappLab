@@ -2,6 +2,11 @@ package com.jahop.common.msg;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Common header for all messages
+ * Size: 32 bytes
+ * 8 bytes are reserved for future use
+ */
 public abstract class Message {
     private final MsgHeader msgHeader = new MsgHeader();
 
@@ -15,6 +20,7 @@ public abstract class Message {
         msgHeader.setSourceId(buffer.getInt());
         msgHeader.setSeqNo(buffer.getLong());
         msgHeader.setTimestampMs(buffer.getLong());
+        buffer.getLong();   //reserved
         readBody(buffer);
     }
 
@@ -26,6 +32,7 @@ public abstract class Message {
         buffer.putInt(msgHeader.getSourceId());
         buffer.putLong(msgHeader.getSeqNo());
         buffer.putLong(msgHeader.getTimestampMs());
+        buffer.putLong(0);  //reserved
         writeBody(buffer);
     }
 

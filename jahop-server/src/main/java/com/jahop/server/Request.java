@@ -1,20 +1,20 @@
 package com.jahop.server;
 
 public class Request {
-    private byte data;
+    private String name;
 
-    public byte getData() {
-        return data;
+    public String getName() {
+        return name;
     }
 
-    public void setData(byte data) {
-        this.data = data;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "Request{" +
-                "data=" + data +
+                "name=" + name +
                 '}';
     }
 }

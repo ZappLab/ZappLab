@@ -2,7 +2,8 @@ package com.jahop.common.msg;
 
 import java.nio.ByteBuffer;
 
-public class Heartbeat extends Message {
+public final class Heartbeat extends Message {
+    public static final int SIZE = MsgHeader.SIZE + 8;
     private long revision;
 
     public long getRevision() {
