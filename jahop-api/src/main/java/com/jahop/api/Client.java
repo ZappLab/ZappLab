@@ -51,7 +51,7 @@ public class Client {
         payload.setPartNo(0);
         payload.setPartsCount(1);
         final byte[] data = request.toByteArray();
-        payload.setSize(data.length);
+        payload.setPartSize(data.length);
         payload.write(sendBuffer);
         sendBuffer.put(data);
         sendBuffer.flip();

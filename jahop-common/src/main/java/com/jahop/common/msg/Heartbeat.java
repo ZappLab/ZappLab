@@ -25,9 +25,15 @@ public final class Heartbeat extends Message {
     }
 
     @Override
+    protected int getSize() {
+        return SIZE;
+    }
+
+    @Override
     public String toString() {
         return "Heartbeat{" +
-                "revision=" + revision +
+                "header=" + getMsgHeader() +
+                ", revision=" + revision +
                 '}';
     }
 }

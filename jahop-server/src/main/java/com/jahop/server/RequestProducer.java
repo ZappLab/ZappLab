@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 class RequestProducer {
-    private final byte[] data = new byte[Payload.MAX_DATA_SIZE];
+    private final byte[] data = new byte[Payload.MAX_PART_SIZE];
     private final Payload payload = new Payload();
     private final Messages.SnapshotRequest.Builder builder = Messages.SnapshotRequest.newBuilder();
 
@@ -25,11 +25,12 @@ class RequestProducer {
     }
 
     void onData(final ByteBuffer buffer) throws IOException {
-        payload.read(buffer);
-        final int dataLength = payload.getSize();
-        System.out.println(payload);
-        buffer.get(data, 0, dataLength);
-        final Messages.SnapshotRequest request = builder.clear().mergeFrom(data, 0, dataLength).build();
-        ringBuffer.publishEvent(TRANSLATOR, request);
+        while (payload.read(buffer)) {
+            final int dataLength = payload.getPartSize();
+            System.out.println(payload);
+            buffer.get(data, 0, dataLength);
+            final Messages.SnapshotRequest request = builder.clear().mergeFrom(data, 0, dataLength).build();
+            ringBuffer.publishEvent(TRANSLATOR, request);
+        }
     }
 }

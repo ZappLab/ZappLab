@@ -25,9 +25,15 @@ public final class Ack extends Message {
     }
 
     @Override
+    protected int getSize() {
+        return SIZE;
+    }
+
+    @Override
     public String toString() {
         return "Ack{" +
-                "requestId=" + requestId +
+                "header=" + getMsgHeader() +
+                ", requestId=" + requestId +
                 '}';
     }
 }

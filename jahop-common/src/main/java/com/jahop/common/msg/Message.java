@@ -3,38 +3,37 @@ package com.jahop.common.msg;
 import java.nio.ByteBuffer;
 
 /**
- * Common header for all messages
- * Size: 32 bytes
- * 8 bytes are reserved for future use
+ * Base class for all messages. Max message size is limited by 64Kb.
  */
 public abstract class Message {
+    public static final int MAX_SIZE = 1 << 16;     // 64k
     private final MsgHeader msgHeader = new MsgHeader();
 
     public MsgHeader getMsgHeader() {
         return msgHeader;
     }
 
-    public final void read(final ByteBuffer buffer) {
-        msgHeader.setMsgType(buffer.getShort());
-        msgHeader.setMsgVersion(buffer.getShort());
-        msgHeader.setSourceId(buffer.getInt());
-        msgHeader.setSeqNo(buffer.getLong());
-        msgHeader.setTimestampMs(buffer.getLong());
-        buffer.getLong();   //reserved
+    public final boolean read(final ByteBuffer buffer) {
+        if (buffer.remaining() < getSize()) {
+            return false;
+        }
+        msgHeader.read(buffer);
         readBody(buffer);
+        return true;
     }
 
     protected abstract void readBody(final ByteBuffer buffer);
 
-    public final void write(final ByteBuffer buffer) {
-        buffer.putShort(msgHeader.getMsgType());
-        buffer.putShort(msgHeader.getMsgVersion());
-        buffer.putInt(msgHeader.getSourceId());
-        buffer.putLong(msgHeader.getSeqNo());
-        buffer.putLong(msgHeader.getTimestampMs());
-        buffer.putLong(0);  //reserved
+    public final boolean write(final ByteBuffer buffer) {
+        if (buffer.capacity() - buffer.position() < getSize()) {
+            return false;
+        }
+        msgHeader.write(buffer);
         writeBody(buffer);
+        return true;
     }
 
     protected abstract void writeBody(final ByteBuffer buffer);
+
+    protected abstract int getSize();
 }

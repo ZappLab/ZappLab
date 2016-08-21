@@ -1,24 +1,22 @@
 package com.jahop.common.msg;
 
-import com.jahop.common.util.ByteUtils;
-
 import java.nio.ByteBuffer;
 
 import static com.jahop.common.util.ByteUtils.read2LowerBytes;
 import static com.jahop.common.util.ByteUtils.write2LowerBytes;
 
 /**
- * Payload message. Contains binary data (~64Kb max)
- * If reference data is larger than max size, it is uploaded using multiple payload messages.
+ * Payload message. Contains binary data.
+ * If reference data is larger than max partSize, it is uploaded using multiple payload messages.
  * Size: 32 bytes (header) + 16 bytes (payload header) + data.length
  */
 public class Payload extends Message {
-    public static final int MAX_SIZE = 1 << 16;     // 64k
-    public static final int MAX_DATA_SIZE = MAX_SIZE - (MsgHeader.SIZE + 16);
+    public static final int PAYLOAD_HEADER_SIZE = 16;
+    public static final int MAX_PART_SIZE = MAX_SIZE - (MsgHeader.SIZE + PAYLOAD_HEADER_SIZE);
     private long requestId;
-    private int partNo;
     private int partsCount;
-    private int size;
+    private int partNo;
+    private int partSize;
 
     public long getRequestId() {
         return requestId;
@@ -44,20 +42,20 @@ public class Payload extends Message {
         this.partsCount = partsCount;
     }
 
-    public int getSize() {
-        return size;
+    public int getPartSize() {
+        return partSize;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setPartSize(int partSize) {
+        this.partSize = partSize;
     }
 
     @Override
     protected void readBody(ByteBuffer buffer) {
         requestId = buffer.getLong();
-        partNo = read2LowerBytes(buffer);
         partsCount = read2LowerBytes(buffer);
-        size = read2LowerBytes(buffer);
+        partNo = read2LowerBytes(buffer);
+        partSize = read2LowerBytes(buffer);
         buffer.get();    //padding
         buffer.get();    //padding
     }
@@ -65,21 +63,26 @@ public class Payload extends Message {
     @Override
     protected void writeBody(ByteBuffer buffer) {
         buffer.putLong(requestId);
-        write2LowerBytes(buffer, partNo);
         write2LowerBytes(buffer, partsCount);
-        write2LowerBytes(buffer, size);
+        write2LowerBytes(buffer, partNo);
+        write2LowerBytes(buffer, partSize);
         buffer.put((byte)0);   //padding
         buffer.put((byte)0);   //padding
     }
 
     @Override
+    protected int getSize() {
+        return MsgHeader.SIZE + PAYLOAD_HEADER_SIZE;
+    }
+
+    @Override
     public String toString() {
         return "Payload{" +
-                "msgHeader=" + getMsgHeader() +
+                "header=" + getMsgHeader() +
                 ", requestId=" + requestId +
-                ", partNo=" + partNo +
                 ", partsCount=" + partsCount +
-                ", size=" + size +
+                ", partNo=" + partNo +
+                ", partSize=" + partSize +
                 '}';
     }
 }
