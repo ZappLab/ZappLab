@@ -3,6 +3,8 @@ package com.jahop.api;
 import com.jahop.common.msg.MsgType;
 import com.jahop.common.msg.Payload;
 import com.jahop.common.msg.proto.Messages;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,6 +15,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Client {
+    private static final Logger log = LogManager.getLogger(Client.class);
     private final ByteBuffer sendBuffer = ByteBuffer.allocate(Payload.MAX_SIZE);
     private final Payload payload = new Payload();
     private final AtomicLong sequencer = new AtomicLong(System.currentTimeMillis());
@@ -34,10 +37,12 @@ public class Client {
         socketChannel.configureBlocking(false);
         socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
         socketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+        log.info("Client started (remote: {})", serverAddress);
     }
 
     public void stop() throws IOException {
         socketChannel.close();
+        log.info("Client terminated.");
     }
 
     public void send(final Messages.SnapshotRequest request) throws IOException {
@@ -56,6 +61,6 @@ public class Client {
         sendBuffer.put(data);
         sendBuffer.flip();
         socketChannel.write(sendBuffer);
-        System.out.println(payload);
+        log.info("Send: {}", payload);
     }
 }

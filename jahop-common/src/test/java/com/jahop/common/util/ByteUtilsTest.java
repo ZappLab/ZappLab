@@ -1,5 +1,7 @@
 package com.jahop.common.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,16 +13,17 @@ import java.util.Random;
  * Created by Pavel on 8/20/2016.
  */
 public class ByteUtilsTest {
+    private static final Logger log = LogManager.getLogger(ByteUtilsTest.class);
     @Test
     public void writeAndRead2LowerBytes() throws Exception {
         final int number = new Random(System.nanoTime()).nextInt();
-        System.out.println("Number: " + number);
-        System.out.println("Expected: " + (number & 0xffff));
+        log.debug("Number: " + number);
+        log.debug("Expected: " + (number & 0xffff));
         final ByteBuffer bb = ByteBuffer.allocate(2);
         ByteUtils.write2LowerBytes(bb, number);
         bb.flip();
         final int candidate = ByteUtils.read2LowerBytes(bb);
         Assert.assertEquals(number & 0xffff, candidate);
-        System.out.println(Integer.toBinaryString(candidate));
+        log.debug(Integer.toBinaryString(candidate));
     }
 }

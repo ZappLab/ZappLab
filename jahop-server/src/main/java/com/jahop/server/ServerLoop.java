@@ -1,7 +1,7 @@
 package com.jahop.server;
 
-import com.google.protobuf.CodedInputStream;
-import com.jahop.common.msg.Payload;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,7 +15,7 @@ import java.nio.channels.spi.SelectorProvider;
 import java.util.Iterator;
 
 public class ServerLoop {
-
+    private static final Logger log = LogManager.getLogger(ServerLoop.class);
     private static final int BUFFER_SIZE = 1024;
     private static final int DEFAULT_PORT = 9090;
 
@@ -35,6 +35,7 @@ public class ServerLoop {
     }
 
     public void start() {
+        log.info("Server started on port: {}", port);
         while (true) {
             try {
                 selector.select();
@@ -73,7 +74,7 @@ public class ServerLoop {
         socketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
         socketChannel.register(selector, SelectionKey.OP_READ);
 
-        System.out.println("Client is connected");
+        log.info("Client is connected: {}", socketChannel.getRemoteAddress());
     }
 
     private void read(final SelectionKey key) throws IOException {
@@ -90,12 +91,12 @@ public class ServerLoop {
             socketChannel.close();
             key.cancel();
 
-            System.out.println("Forceful shutdown");
+            log.error("Forceful shutdown");
             return;
         }
 
         if (numRead == -1) {
-            System.out.println("Graceful shutdown");
+            log.info("Graceful shutdown");
             socketChannel.close();
             key.cancel();
 
@@ -103,7 +104,7 @@ public class ServerLoop {
         }
 
         readBuffer.flip();
-        System.out.println("Available: " + readBuffer.remaining());
+        log.info("Available: {} bytes", readBuffer.remaining());
         producer.onData(readBuffer);
 
 //        socketChannel.register(selector, SelectionKey.OP_WRITE);
@@ -112,17 +113,16 @@ public class ServerLoop {
 //        if (numMessages % 100000 == 0) {
 //            long elapsed = System.currentTimeMillis() - loopTime;
 //            loopTime = System.currentTimeMillis();
-//            System.out.println(elapsed);
 //        }
     }
 
     private void write(SelectionKey key) throws IOException {
-        SocketChannel socketChannel = (SocketChannel) key.channel();
+        final SocketChannel socketChannel = (SocketChannel) key.channel();
         ByteBuffer dummyResponse = ByteBuffer.wrap("ok".getBytes("UTF-8"));
 
         socketChannel.write(dummyResponse);
         if (dummyResponse.remaining() > 0) {
-            System.err.print("Filled UP");
+            log.error("Filled UP");
         }
 
         key.interestOps(SelectionKey.OP_READ);

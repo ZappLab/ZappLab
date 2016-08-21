@@ -4,11 +4,14 @@ import com.jahop.common.msg.Payload;
 import com.jahop.common.msg.proto.Messages;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
 class RequestProducer {
+    private static final Logger log = LogManager.getLogger(RequestProducer.class);
     private final byte[] data = new byte[Payload.MAX_PART_SIZE];
     private final Payload payload = new Payload();
     private final Messages.SnapshotRequest.Builder builder = Messages.SnapshotRequest.newBuilder();
@@ -26,11 +29,15 @@ class RequestProducer {
 
     void onData(final ByteBuffer buffer) throws IOException {
         while (payload.read(buffer)) {
-            final int dataLength = payload.getPartSize();
-            System.out.println(payload);
-            buffer.get(data, 0, dataLength);
-            final Messages.SnapshotRequest request = builder.clear().mergeFrom(data, 0, dataLength).build();
-            ringBuffer.publishEvent(TRANSLATOR, request);
+            final int partSize = payload.getPartSize();
+            log.info("Received: {}", payload);
+            if (buffer.remaining() < partSize) {
+                log.error("Broken data. Expected: {} bytes, actual: {} bytes", partSize, buffer.remaining());
+            } else {
+                buffer.get(data, 0, partSize);
+                final Messages.SnapshotRequest request = builder.clear().mergeFrom(data, 0, partSize).build();
+                ringBuffer.publishEvent(TRANSLATOR, request);
+            }
         }
     }
 }
