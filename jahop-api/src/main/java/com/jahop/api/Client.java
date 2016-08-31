@@ -19,20 +19,20 @@ public class Client {
     private final ByteBuffer sendBuffer = ByteBuffer.allocate(Payload.MAX_SIZE);
     private final Payload payload = new Payload();
     private final AtomicLong sequencer = new AtomicLong(System.currentTimeMillis());
-    private String host;
-    private int port;
+    private String remoteHost;
+    private int remotePort;
     private SocketChannel socketChannel;
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setRemoteHost(String remoteHost) {
+        this.remoteHost = remoteHost;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
     }
 
     public void start() throws IOException {
-        final SocketAddress serverAddress = new InetSocketAddress(host, port);
+        final SocketAddress serverAddress = new InetSocketAddress(remoteHost, remotePort);
         socketChannel = SocketChannel.open(serverAddress);
         socketChannel.configureBlocking(false);
         socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);

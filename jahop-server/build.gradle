@@ -37,14 +37,10 @@ uploadArchives {
 }
 
 dependencies {
-    testCompile("junit:junit:4.+")
     compile project(":jahop-common")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("commons-io:commons-io:2.4")
     compile("commons-lang:commons-lang:2.6")
     compile("com.google.guava:guava:18.0")
     compile("com.lmax:disruptor:3.3.4")
-    compile("com.google.protobuf:protobuf-java:2.6.1")
-    compile("org.apache.logging.log4j:log4j-api:2.6.2")
-    compile("org.apache.logging.log4j:log4j-core:2.6.2")
 }

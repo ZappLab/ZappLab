@@ -17,26 +17,31 @@ import java.util.Iterator;
 public class ServerLoop {
     private static final Logger log = LogManager.getLogger(ServerLoop.class);
     private static final int BUFFER_SIZE = 1024;
-    private static final int DEFAULT_PORT = 9090;
 
     private final ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private final RequestProducer producer;
     private final int port;
     private final Selector selector;
 
-    public ServerLoop(final RequestProducer producer) throws IOException {
-        this(producer, DEFAULT_PORT);
-    }
+    private final Thread thread;
+    private volatile boolean started;
 
     public ServerLoop(final RequestProducer producer, final int port) throws IOException {
         this.producer = producer;
         this.port = port;
         this.selector = initSelector();
+        this.thread = new Thread(this::run);
+        this.thread.setName("server-thread");
     }
 
     public void start() {
+        started = true;
+        thread.start();
         log.info("Server started on port: {}", port);
-        while (true) {
+    }
+
+    public void run() {
+        while (started) {
             try {
                 selector.select();
                 final Iterator<SelectionKey> selectedKeys = selector.selectedKeys().iterator();
@@ -57,12 +62,21 @@ public class ServerLoop {
                         write(key);
                     }
                 }
-
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Fatal error.", e);
                 System.exit(1);
             }
         }
+    }
+
+    public void stop() {
+        started = false;
+        try {
+            thread.join(1000);
+        } catch (InterruptedException e) {
+            log.error("Server thread interrupted.", e);
+        }
+        log.info("Server stopped");
     }
 
     private void accept(final SelectionKey key) throws IOException {
@@ -106,14 +120,6 @@ public class ServerLoop {
         readBuffer.flip();
         log.info("Available: {} bytes", readBuffer.remaining());
         producer.onData(readBuffer);
-
-//        socketChannel.register(selector, SelectionKey.OP_WRITE);
-//
-//        numMessages++;
-//        if (numMessages % 100000 == 0) {
-//            long elapsed = System.currentTimeMillis() - loopTime;
-//            loopTime = System.currentTimeMillis();
-//        }
     }
 
     private void write(SelectionKey key) throws IOException {
