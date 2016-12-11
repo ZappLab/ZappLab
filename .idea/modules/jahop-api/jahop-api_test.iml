@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":jahop-api:test" external.linked.project.path="$MODULE_DIR$/../../../jahop-api" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="jahop" external.system.module.type="sourceSet" external.system.module.version="1.0" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output-test url="file://$MODULE_DIR$/../../../jahop-api/build/classes/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../jahop-api/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../jahop-api/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../jahop-api/src/test/resources" type="java-test-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="jahop-api_main" />
+    <orderEntry type="module" module-name="jahop-common_main" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:2.4.7" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-core:4.3.5.BUILD-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-context:4.3.5.BUILD-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-aop:4.3.5.BUILD-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-beans:4.3.5.BUILD-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-expression:4.3.5.BUILD-SNAPSHOT" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="jahop-api_main" />
+</module>
