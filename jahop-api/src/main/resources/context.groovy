@@ -9,15 +9,33 @@ class DummySender {
     void send() {
         final Messages.SnapshotRequest.Builder builder = Messages.SnapshotRequest.newBuilder();
         client.connect();
-        final Sender sender = client.getSender("dummy")
-        for (byte i = 0; i < 8; i++) {
+        try {
+            final Sender sender = client.getSender("dummy")
+            // small
+            for (byte i = 0; i < 8; i++) {
+                builder.clear()
+                builder.setClientRevision(1)
+                builder.addPath(String.valueOf(i))
+                sender.send(builder.build().toByteArray())
+            }
+            //large one
             builder.clear()
             builder.setClientRevision(1)
-            builder.addPath(String.valueOf(i))
-            final Messages.SnapshotRequest request = builder.build()
-            sender.send(request.toByteArray())
+            for (int i = 0; i < 600; i++) {
+                builder.addPath(String.valueOf(i))
+            }
+            sender.send(builder.build().toByteArray())
+            // small
+            Thread.sleep(500)
+            for (byte i = 8; i < 12; i++) {
+                builder.clear()
+                builder.setClientRevision(1)
+                builder.addPath(String.valueOf(i))
+                sender.send(builder.build().toByteArray())
+            }
+        } finally {
+            client.close()
         }
-        client.close()
     }
 }
 

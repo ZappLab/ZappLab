@@ -33,10 +33,10 @@ message EntrySet {
 
 message Entry {
     enum Action {
-        ADD = 0;
-        REMOVE = 1;
+        UPDATE = 0;
+        DELETE = 1;
     }
     required string key = 1;
     required string value = 2;
-    required Action action = 3;
+    optional Action action = 3 [default = UPDATE];
 }

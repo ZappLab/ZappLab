@@ -30,14 +30,14 @@ class RequestProducer {
     void onData(final ByteBuffer buffer) throws IOException {
         while (payload.read(buffer)) {
             final int partSize = payload.getPartSize();
-            log.info("Received: {}", payload);
+            log.info("Message: {}", payload);
             if (buffer.remaining() < partSize) {
                 log.error("Broken data. Expected: {} bytes, actual: {} bytes", partSize, buffer.remaining());
-            } else {
-                buffer.get(data, 0, partSize);
-                final Messages.SnapshotRequest request = builder.clear().mergeFrom(data, 0, partSize).build();
-                ringBuffer.publishEvent(TRANSLATOR, request);
+                break;
             }
+            buffer.get(data, 0, partSize);
+            final Messages.SnapshotRequest request = builder.clear().mergeFrom(data, 0, partSize).build();
+            ringBuffer.publishEvent(TRANSLATOR, request);
         }
     }
 }

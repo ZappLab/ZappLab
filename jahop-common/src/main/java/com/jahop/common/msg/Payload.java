@@ -12,7 +12,7 @@ import static com.jahop.common.util.ByteUtils.write2LowerBytes;
  */
 public class Payload extends Message {
     public static final int PAYLOAD_HEADER_SIZE = 16;
-    public static final int MAX_PART_SIZE = MAX_SIZE - (MsgHeader.SIZE + PAYLOAD_HEADER_SIZE);
+    public static final int MAX_PART_SIZE = MAX_SIZE - (MessageHeader.SIZE + PAYLOAD_HEADER_SIZE);
     private long requestId;
     private int partsCount;
     private int partNo;
@@ -72,7 +72,7 @@ public class Payload extends Message {
 
     @Override
     protected int getSize() {
-        return MsgHeader.SIZE + PAYLOAD_HEADER_SIZE;
+        return MessageHeader.SIZE + PAYLOAD_HEADER_SIZE;
     }
 
     @Override

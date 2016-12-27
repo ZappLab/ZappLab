@@ -1,5 +1,6 @@
 package com.jahop.server;
 
+import com.jahop.common.msg.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,9 +17,8 @@ import java.util.Iterator;
 
 public class ServerLoop {
     private static final Logger log = LogManager.getLogger(ServerLoop.class);
-    private static final int BUFFER_SIZE = 1024;
 
-    private final ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+    private final ByteBuffer readBuffer = ByteBuffer.allocate(Message.MAX_SIZE);
     private final RequestProducer producer;
     private final int port;
     private final Selector selector;
@@ -88,7 +88,7 @@ public class ServerLoop {
         socketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
         socketChannel.register(selector, SelectionKey.OP_READ);
 
-        log.info("Client is connected: {}", socketChannel.getRemoteAddress());
+        log.info("{}: connected", socketChannel.getRemoteAddress());
     }
 
     private void read(final SelectionKey key) throws IOException {
@@ -98,28 +98,28 @@ public class ServerLoop {
         readBuffer.clear();
 
         // Attempt to read off the channel
-        int numRead;
+        final int numRead;
         try {
             numRead = socketChannel.read(readBuffer);
         } catch (IOException e) {
-            socketChannel.close();
+            log.error("{}: disconnected ({})", socketChannel.getRemoteAddress(), e.getMessage());
             key.cancel();
-
-            log.error("Forceful shutdown");
+            socketChannel.close();
             return;
         }
 
         if (numRead == -1) {
-            log.info("Graceful shutdown");
-            socketChannel.close();
+            log.info("{}: disconnected", socketChannel.getRemoteAddress());
             key.cancel();
-
+            socketChannel.close();
             return;
         }
 
         readBuffer.flip();
-        log.info("Available: {} bytes", readBuffer.remaining());
-        producer.onData(readBuffer);
+        if (readBuffer.hasRemaining()) {
+            log.info("{}: received {} bytes", socketChannel.getRemoteAddress(), readBuffer.remaining());
+            producer.onData(readBuffer);
+        }
     }
 
     private void write(SelectionKey key) throws IOException {

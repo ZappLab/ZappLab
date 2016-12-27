@@ -3822,11 +3822,11 @@ public final class Messages {
         getValueBytes();
 
     /**
-     * <code>required .jahop.messages.Entry.Action action = 3;</code>
+     * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
      */
     boolean hasAction();
     /**
-     * <code>required .jahop.messages.Entry.Action action = 3;</code>
+     * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
      */
     com.jahop.common.msg.proto.Messages.Entry.Action getAction();
   }
@@ -3950,31 +3950,31 @@ public final class Messages {
     public enum Action
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>ADD = 0;</code>
+       * <code>UPDATE = 0;</code>
        */
-      ADD(0, 0),
+      UPDATE(0, 0),
       /**
-       * <code>REMOVE = 1;</code>
+       * <code>DELETE = 1;</code>
        */
-      REMOVE(1, 1),
+      DELETE(1, 1),
       ;
 
       /**
-       * <code>ADD = 0;</code>
+       * <code>UPDATE = 0;</code>
        */
-      public static final int ADD_VALUE = 0;
+      public static final int UPDATE_VALUE = 0;
       /**
-       * <code>REMOVE = 1;</code>
+       * <code>DELETE = 1;</code>
        */
-      public static final int REMOVE_VALUE = 1;
+      public static final int DELETE_VALUE = 1;
 
 
       public final int getNumber() { return value; }
 
       public static Action valueOf(int value) {
         switch (value) {
-          case 0: return ADD;
-          case 1: return REMOVE;
+          case 0: return UPDATE;
+          case 1: return DELETE;
           default: return null;
         }
       }
@@ -4114,13 +4114,13 @@ public final class Messages {
     public static final int ACTION_FIELD_NUMBER = 3;
     private com.jahop.common.msg.proto.Messages.Entry.Action action_;
     /**
-     * <code>required .jahop.messages.Entry.Action action = 3;</code>
+     * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
      */
     public boolean hasAction() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .jahop.messages.Entry.Action action = 3;</code>
+     * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
      */
     public com.jahop.common.msg.proto.Messages.Entry.Action getAction() {
       return action_;
@@ -4129,7 +4129,7 @@ public final class Messages {
     private void initFields() {
       key_ = "";
       value_ = "";
-      action_ = com.jahop.common.msg.proto.Messages.Entry.Action.ADD;
+      action_ = com.jahop.common.msg.proto.Messages.Entry.Action.UPDATE;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -4142,10 +4142,6 @@ public final class Messages {
         return false;
       }
       if (!hasValue()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasAction()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -4307,7 +4303,7 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000001);
         value_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        action_ = com.jahop.common.msg.proto.Messages.Entry.Action.ADD;
+        action_ = com.jahop.common.msg.proto.Messages.Entry.Action.UPDATE;
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
@@ -4388,10 +4384,6 @@ public final class Messages {
           return false;
         }
         if (!hasValue()) {
-          
-          return false;
-        }
-        if (!hasAction()) {
           
           return false;
         }
@@ -4569,21 +4561,21 @@ public final class Messages {
         return this;
       }
 
-      private com.jahop.common.msg.proto.Messages.Entry.Action action_ = com.jahop.common.msg.proto.Messages.Entry.Action.ADD;
+      private com.jahop.common.msg.proto.Messages.Entry.Action action_ = com.jahop.common.msg.proto.Messages.Entry.Action.UPDATE;
       /**
-       * <code>required .jahop.messages.Entry.Action action = 3;</code>
+       * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
        */
       public boolean hasAction() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .jahop.messages.Entry.Action action = 3;</code>
+       * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
        */
       public com.jahop.common.msg.proto.Messages.Entry.Action getAction() {
         return action_;
       }
       /**
-       * <code>required .jahop.messages.Entry.Action action = 3;</code>
+       * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
        */
       public Builder setAction(com.jahop.common.msg.proto.Messages.Entry.Action value) {
         if (value == null) {
@@ -4595,11 +4587,11 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required .jahop.messages.Entry.Action action = 3;</code>
+       * <code>optional .jahop.messages.Entry.Action action = 3 [default = UPDATE];</code>
        */
       public Builder clearAction() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        action_ = com.jahop.common.msg.proto.Messages.Entry.Action.ADD;
+        action_ = com.jahop.common.msg.proto.Messages.Entry.Action.UPDATE;
         onChanged();
         return this;
       }
@@ -4664,10 +4656,11 @@ public final class Messages {
       "\026.jahop.messages.Header\022+\n\tentry_set\030\002 \003" +
       "(\0132\030.jahop.messages.EntrySet\">\n\010EntrySet" +
       "\022\014\n\004path\030\001 \002(\t\022$\n\005entry\030\002 \003(\0132\025.jahop.me",
-      "ssages.Entry\"p\n\005Entry\022\013\n\003key\030\001 \002(\t\022\r\n\005va" +
-      "lue\030\002 \002(\t\022,\n\006action\030\003 \002(\0162\034.jahop.messag" +
-      "es.Entry.Action\"\035\n\006Action\022\007\n\003ADD\020\000\022\n\n\006RE" +
-      "MOVE\020\001B\034\n\032com.jahop.common.msg.proto"
+      "ssages.Entry\"{\n\005Entry\022\013\n\003key\030\001 \002(\t\022\r\n\005va" +
+      "lue\030\002 \002(\t\0224\n\006action\030\003 \001(\0162\034.jahop.messag" +
+      "es.Entry.Action:\006UPDATE\" \n\006Action\022\n\n\006UPD" +
+      "ATE\020\000\022\n\n\006DELETE\020\001B\034\n\032com.jahop.common.ms" +
+      "g.proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

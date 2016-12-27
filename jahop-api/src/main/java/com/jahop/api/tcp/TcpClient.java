@@ -2,9 +2,8 @@ package com.jahop.api.tcp;
 
 import com.jahop.api.Client;
 import com.jahop.api.Sender;
-import com.jahop.common.msg.MsgType;
+import com.jahop.common.msg.MessageType;
 import com.jahop.common.msg.Payload;
-import com.jahop.common.msg.proto.Messages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,8 +51,8 @@ public class TcpClient implements Client {
                 try {
                     sendBuffer.clear();
                     final long timestamp = System.currentTimeMillis();
-                    payload.getMsgHeader().setMsgType(MsgType.SNAPSHOT_REQUEST);
-                    payload.getMsgHeader().setMsgVersion((short) 1);
+                    payload.getMsgHeader().setType(MessageType.SNAPSHOT_REQUEST);
+                    payload.getMsgHeader().setVersion((short) 1);
                     payload.getMsgHeader().setSourceId(42);
                     payload.getMsgHeader().setSeqNo(sequencer.incrementAndGet());
                     payload.getMsgHeader().setTimestampMs(timestamp);

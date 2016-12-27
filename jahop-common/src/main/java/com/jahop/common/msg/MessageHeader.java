@@ -8,29 +8,29 @@ import java.nio.ByteBuffer;
  * 8 bytes are reserved for future use
  */
 
-public final class MsgHeader {
-    public static final int SIZE = 32;  //Header size is 24 bytes
-    private short msgType;              //  pos=0, size=2
-    private short msgVersion;           //  pos=2, size=2
-    private int sourceId;               //  pos=4, size=4
-    private long seqNo;                 //  pos=8, size=8
-    private long timestampMs;           //  pos=16, size=8
-//    private long reserved;              //  pos=24, size=8
+public final class MessageHeader {
+    public static final int SIZE = 32;      //Header size is 24 bytes
+    private short type;                     //  pos=0, size=2
+    private short version;                  //  pos=2, size=2
+    private int sourceId;                   //  pos=4, size=4
+    private long seqNo;                     //  pos=8, size=8
+    private long timestampMs;               //  pos=16, size=8
+//    private long reserved;                //  pos=24, size=8
 
-    public short getMsgType() {
-        return msgType;
+    public short getType() {
+        return type;
     }
 
-    public void setMsgType(short msgType) {
-        this.msgType = msgType;
+    public void setType(short type) {
+        this.type = type;
     }
 
-    public short getMsgVersion() {
-        return msgVersion;
+    public short getVersion() {
+        return version;
     }
 
-    public void setMsgVersion(short msgVersion) {
-        this.msgVersion = msgVersion;
+    public void setVersion(short version) {
+        this.version = version;
     }
 
     public int getSourceId() {
@@ -58,8 +58,8 @@ public final class MsgHeader {
     }
 
     public final void read(final ByteBuffer buffer) {
-        setMsgType(buffer.getShort());
-        setMsgVersion(buffer.getShort());
+        setType(buffer.getShort());
+        setVersion(buffer.getShort());
         setSourceId(buffer.getInt());
         setSeqNo(buffer.getLong());
         setTimestampMs(buffer.getLong());
@@ -67,8 +67,8 @@ public final class MsgHeader {
     }
 
     public final void write(final ByteBuffer buffer) {
-        buffer.putShort(getMsgType());
-        buffer.putShort(getMsgVersion());
+        buffer.putShort(getType());
+        buffer.putShort(getVersion());
         buffer.putInt(getSourceId());
         buffer.putLong(getSeqNo());
         buffer.putLong(getTimestampMs());
@@ -77,9 +77,9 @@ public final class MsgHeader {
 
     @Override
     public String toString() {
-        return "MsgHeader{" +
-                "msgType=" + MsgType.toString(msgType) +
-                ", msgVersion=" + msgVersion +
+        return "MessageHeader{" +
+                "type=" + MessageType.toString(type) +
+                ", version=" + version +
                 ", sourceId=" + sourceId +
                 ", seqNo=" + seqNo +
                 ", timestampMs=" + timestampMs +
