@@ -1,12 +1,13 @@
 import com.jahop.api.Sender
 import com.jahop.api.tcp.TcpClient
 import com.jahop.api.tcp.TcpClientFactory
+import com.jahop.common.msg.MessageFactory
 import com.jahop.common.msg.proto.Messages
 
 class DummySender {
     TcpClient client;
 
-    void send() {
+    void start() {
         final Messages.SnapshotRequest.Builder builder = Messages.SnapshotRequest.newBuilder();
         client.connect();
         try {
@@ -43,11 +44,15 @@ beans {
     clientFactory(TcpClientFactory)
 
     client(clientFactory: "create") { bean ->
-        bean.constructorArgs=[["jahop.server.host":"localhost","jahop.server.port":"9090"]]
+        bean.constructorArgs=[[
+                                      "jahop.server.host":"localhost",
+                                      "jahop.server.port":"9090",
+                                      "jahop.client.id":"13"
+                              ]]
     }
 
     dummySender(DummySender) { bean ->
-        bean.initMethod = "send"
+        bean.initMethod = "start"
         client = client
     }
 }

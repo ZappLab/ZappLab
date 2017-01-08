@@ -1,8 +1,8 @@
 package com.jahop.server;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.jahop.common.msg.MessageFactory;
 import com.lmax.disruptor.BlockingWaitStrategy;
-import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import org.apache.logging.log4j.LogManager;
@@ -17,57 +17,46 @@ import java.util.concurrent.ThreadFactory;
 public class Server {
     private static Logger log = LogManager.getLogger(Server.class);
 
+    private int sourceId = 1;
     private int port = 9090;
     private ServerLoop serverLoop;
+    private MessageFactory messageFactory;
 
     // >>> Server request infrastructure
-    private final ThreadFactory requestThreadFactory = new ThreadFactoryBuilder().setNameFormat("request-thread-%d").build();
+    private final ThreadFactory workerThreadFactory = new ThreadFactoryBuilder().setNameFormat("worker-thread-%d").build();
     private final RequestFactory requestFactory = new RequestFactory();
     // Specify the size of the request ring buffer, must be power of 2.
     private int requestBufferSize = 1024;
     private Disruptor<Request> requestDisruptor;
 
-    // <<< Server response infrastructure
-    private final ThreadFactory responseThreadFactory = new ThreadFactoryBuilder().setNameFormat("response-thread-%d").build();
-//    final RequestFactory responseFactory = new RequestFactory();
-    // Specify the size of the response ring buffer, must be power of 2.
-    private int responseBufferSize = 1024;
-    private Disruptor<Response> responseDisruptor;
-
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public void setSourceId(int sourceId) {
+        this.sourceId = sourceId;
     }
 
     public void setRequestBufferSize(int requestBufferSize) {
         this.requestBufferSize = requestBufferSize;
     }
 
-    public void setResponseBufferSize(int responseBufferSize) {
-        this.responseBufferSize = responseBufferSize;
-    }
-
     public void start() throws IOException {
-        // Construct response disruptor and message handler
-        responseDisruptor = new Disruptor<>(Response::new, responseBufferSize, responseThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
-        responseDisruptor.handleEventsWith(new ResponseHandler());
-        // Start response processing threads
-        responseDisruptor.start();
-
+        messageFactory = new MessageFactory(sourceId);
         // Construct request Disruptor and message handler
-        requestDisruptor = new Disruptor<>(requestFactory, requestBufferSize, requestThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
-        requestDisruptor.handleEventsWith(new RequestHandler());
+        requestDisruptor = new Disruptor<>(requestFactory, requestBufferSize, workerThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
+        requestDisruptor.handleEventsWith(new RequestHandler(messageFactory));
         // Start request processing threads
         requestDisruptor.start();
 
-        final RequestProducer producer = new RequestProducer(requestDisruptor.getRingBuffer());
-
+        final RequestProducer producer = new RequestProducer(requestDisruptor.getRingBuffer(), messageFactory);
         serverLoop = new ServerLoop(producer, port);
+
         serverLoop.start();
     }
 
     public void stop() {
         requestDisruptor.shutdown();
         serverLoop.stop();
-        responseDisruptor.shutdown();
     }
 }

@@ -78,7 +78,7 @@ public class Payload extends Message {
     @Override
     public String toString() {
         return "Payload{" +
-                "header=" + getMsgHeader() +
+                "header=" + getHeader() +
                 ", requestId=" + requestId +
                 ", partsCount=" + partsCount +
                 ", partNo=" + partNo +

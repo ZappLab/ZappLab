@@ -7,17 +7,17 @@ import java.nio.ByteBuffer;
  */
 public abstract class Message {
     public static final int MAX_SIZE = 1 << 16;     // 64k
-    private final MessageHeader messageHeader = new MessageHeader();
+    private final MessageHeader header = new MessageHeader();
 
-    public MessageHeader getMsgHeader() {
-        return messageHeader;
+    public MessageHeader getHeader() {
+        return header;
     }
 
     public final boolean read(final ByteBuffer buffer) {
         if (buffer.remaining() < getSize()) {
             return false;
         }
-        messageHeader.read(buffer);
+        header.read(buffer);
         readBody(buffer);
         return true;
     }
@@ -28,7 +28,7 @@ public abstract class Message {
         if (buffer.capacity() - buffer.position() < getSize()) {
             return false;
         }
-        messageHeader.write(buffer);
+        header.write(buffer);
         writeBody(buffer);
         return true;
     }

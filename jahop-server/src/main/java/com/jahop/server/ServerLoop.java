@@ -75,6 +75,7 @@ public class ServerLoop {
             thread.join(1000);
         } catch (InterruptedException e) {
             log.error("Server thread interrupted.", e);
+            Thread.currentThread().interrupt();
         }
         log.info("Server stopped");
     }
@@ -116,10 +117,10 @@ public class ServerLoop {
         }
 
         readBuffer.flip();
-        if (readBuffer.hasRemaining()) {
-            log.info("{}: received {} bytes", socketChannel.getRemoteAddress(), readBuffer.remaining());
-            producer.onData(readBuffer);
+        if (log.isDebugEnabled()) {
+            log.debug("{}: received {} bytes", socketChannel.getRemoteAddress(), readBuffer.remaining());
         }
+        producer.onData(this, socketChannel, readBuffer);
     }
 
     private void write(SelectionKey key) throws IOException {
@@ -144,5 +145,9 @@ public class ServerLoop {
         serverChannel.socket().bind(isa);
         serverChannel.register(socketSelector, SelectionKey.OP_ACCEPT);
         return socketSelector;
+    }
+
+    public void send(final SocketChannel socketChannel, final Message message) {
+
     }
 }

@@ -32,7 +32,7 @@ public final class Ack extends Message {
     @Override
     public String toString() {
         return "Ack{" +
-                "header=" + getMsgHeader() +
+                "header=" + getHeader() +
                 ", requestId=" + requestId +
                 '}';
     }

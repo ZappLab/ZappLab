@@ -5,6 +5,7 @@ beans {
         bean.initMethod = "start"
         bean.destroyMethod = "stop"
         port = 9090
+        sourceId = 1
     }
 
 }

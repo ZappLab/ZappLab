@@ -32,7 +32,7 @@ public final class Heartbeat extends Message {
     @Override
     public String toString() {
         return "Heartbeat{" +
-                "header=" + getMsgHeader() +
+                "header=" + getHeader() +
                 ", revision=" + revision +
                 '}';
     }
