@@ -2,36 +2,62 @@ package com.jahop.common.msg;
 
 import com.jahop.common.util.Sequencer;
 
+import static com.jahop.common.msg.MessageType.ACK;
+import static com.jahop.common.msg.MessageType.HEARTBEAT;
+import static com.jahop.common.msg.MessageType.PAYLOAD;
+
 public final class MessageFactory {
-    private static final short VERSION = 1;
+    private final byte VERSION = 1;
     private final int sourceId;
     private final Sequencer sequencer;
 
-    public MessageFactory(int sourceId) {
+    public MessageFactory(final int sourceId, final Sequencer sequencer) {
         this.sourceId = sourceId;
-        this.sequencer = new Sequencer();
+        this.sequencer = sequencer;
     }
 
-    public final Ack createAck(final long requestId) {
-        final Ack ack = new Ack();
-        fillHeader(ack, MessageType.ACK);
-        ack.setRequestId(requestId);
-        return ack;
+    public static Message allocateMessage() {
+        final Message message = new Message();
+        message.setPayload(new byte[Message.PAYLOAD_MAX_PART_SIZE]);
+        return message;
     }
 
-    public final Payload createPayload(final short type) {
-        final Payload payload = new Payload();
-        fillHeader(payload, type);
-        return payload;
+    public final Message createAck(final long requestId) {
+        final Message message = new Message();
+        populateHeader(message, ACK, 8);
+        message.setRequestId(requestId);
+        return message;
     }
 
-    public final <T extends Message> T fillHeader(final T message, final short type) {
+    public final Message createHeartbeat(final long revision) {
+        final Message message = new Message();
+        populateHeader(message, HEARTBEAT, 8);
+        message.setRevision(revision);
+        return message;
+    }
+
+    public final Message createPayload(final long revision, final long requestId, final byte[] payload) {
+        final Message message = new Message();
+        populateHeader(message, PAYLOAD, Message.PAYLOAD_HEADER_SIZE + payload.length);
+        message.setRevision(revision);
+        message.setRequestId(requestId);
+        message.setPayloadSize(payload.length);
+        message.setPayload(payload);
+        message.setPartOffset(0);
+        message.setPartLength(payload.length);
+        message.setPartsCount(1);
+        message.setPartNo(0);
+        return message;
+    }
+
+    private Message populateHeader(final Message message, final byte type, final int bodySize) {
         final MessageHeader header = message.getHeader();
-        header.setType(type);
         header.setVersion(VERSION);
+        header.setType(type);
         header.setSourceId(sourceId);
         header.setSeqNo(sequencer.next());
         header.setTimestampMs(System.currentTimeMillis());
+        header.setBodySize(bodySize);
         return message;
     }
 }

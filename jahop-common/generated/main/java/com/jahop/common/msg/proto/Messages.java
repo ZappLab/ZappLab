@@ -8,630 +8,47 @@ public final class Messages {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface SnapshotRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:jahop.messages.SnapshotRequest)
+  public interface UpdateOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:jahop.messages.Update)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional int64 client_revision = 1 [default = -1];</code>
-     */
-    boolean hasClientRevision();
-    /**
-     * <code>optional int64 client_revision = 1 [default = -1];</code>
-     */
-    long getClientRevision();
-
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    com.google.protobuf.ProtocolStringList
-        getPathList();
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    int getPathCount();
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    java.lang.String getPath(int index);
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getPathBytes(int index);
-  }
-  /**
-   * Protobuf type {@code jahop.messages.SnapshotRequest}
-   *
-   * <pre>
-   * messages from client
-   * </pre>
-   */
-  public static final class SnapshotRequest extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:jahop.messages.SnapshotRequest)
-      SnapshotRequestOrBuilder {
-    // Use SnapshotRequest.newBuilder() to construct.
-    private SnapshotRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private SnapshotRequest(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final SnapshotRequest defaultInstance;
-    public static SnapshotRequest getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public SnapshotRequest getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private SnapshotRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              clientRevision_ = input.readInt64();
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                path_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              path_.add(bs);
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          path_ = path_.getUnmodifiableView();
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_SnapshotRequest_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_SnapshotRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.jahop.common.msg.proto.Messages.SnapshotRequest.class, com.jahop.common.msg.proto.Messages.SnapshotRequest.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<SnapshotRequest> PARSER =
-        new com.google.protobuf.AbstractParser<SnapshotRequest>() {
-      public SnapshotRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SnapshotRequest(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<SnapshotRequest> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    public static final int CLIENT_REVISION_FIELD_NUMBER = 1;
-    private long clientRevision_;
-    /**
-     * <code>optional int64 client_revision = 1 [default = -1];</code>
-     */
-    public boolean hasClientRevision() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int64 client_revision = 1 [default = -1];</code>
-     */
-    public long getClientRevision() {
-      return clientRevision_;
-    }
-
-    public static final int PATH_FIELD_NUMBER = 2;
-    private com.google.protobuf.LazyStringList path_;
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    public com.google.protobuf.ProtocolStringList
-        getPathList() {
-      return path_;
-    }
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    public int getPathCount() {
-      return path_.size();
-    }
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    public java.lang.String getPath(int index) {
-      return path_.get(index);
-    }
-    /**
-     * <code>repeated string path = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getPathBytes(int index) {
-      return path_.getByteString(index);
-    }
-
-    private void initFields() {
-      clientRevision_ = -1L;
-      path_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt64(1, clientRevision_);
-      }
-      for (int i = 0; i < path_.size(); i++) {
-        output.writeBytes(2, path_.getByteString(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, clientRevision_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < path_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(path_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getPathList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.SnapshotRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.jahop.common.msg.proto.Messages.SnapshotRequest prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code jahop.messages.SnapshotRequest}
-     *
-     * <pre>
-     * messages from client
-     * </pre>
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:jahop.messages.SnapshotRequest)
-        com.jahop.common.msg.proto.Messages.SnapshotRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_SnapshotRequest_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_SnapshotRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.jahop.common.msg.proto.Messages.SnapshotRequest.class, com.jahop.common.msg.proto.Messages.SnapshotRequest.Builder.class);
-      }
-
-      // Construct using com.jahop.common.msg.proto.Messages.SnapshotRequest.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        clientRevision_ = -1L;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        path_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_SnapshotRequest_descriptor;
-      }
-
-      public com.jahop.common.msg.proto.Messages.SnapshotRequest getDefaultInstanceForType() {
-        return com.jahop.common.msg.proto.Messages.SnapshotRequest.getDefaultInstance();
-      }
-
-      public com.jahop.common.msg.proto.Messages.SnapshotRequest build() {
-        com.jahop.common.msg.proto.Messages.SnapshotRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.jahop.common.msg.proto.Messages.SnapshotRequest buildPartial() {
-        com.jahop.common.msg.proto.Messages.SnapshotRequest result = new com.jahop.common.msg.proto.Messages.SnapshotRequest(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.clientRevision_ = clientRevision_;
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          path_ = path_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.path_ = path_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.jahop.common.msg.proto.Messages.SnapshotRequest) {
-          return mergeFrom((com.jahop.common.msg.proto.Messages.SnapshotRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.jahop.common.msg.proto.Messages.SnapshotRequest other) {
-        if (other == com.jahop.common.msg.proto.Messages.SnapshotRequest.getDefaultInstance()) return this;
-        if (other.hasClientRevision()) {
-          setClientRevision(other.getClientRevision());
-        }
-        if (!other.path_.isEmpty()) {
-          if (path_.isEmpty()) {
-            path_ = other.path_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensurePathIsMutable();
-            path_.addAll(other.path_);
-          }
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.jahop.common.msg.proto.Messages.SnapshotRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.jahop.common.msg.proto.Messages.SnapshotRequest) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private long clientRevision_ = -1L;
-      /**
-       * <code>optional int64 client_revision = 1 [default = -1];</code>
-       */
-      public boolean hasClientRevision() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int64 client_revision = 1 [default = -1];</code>
-       */
-      public long getClientRevision() {
-        return clientRevision_;
-      }
-      /**
-       * <code>optional int64 client_revision = 1 [default = -1];</code>
-       */
-      public Builder setClientRevision(long value) {
-        bitField0_ |= 0x00000001;
-        clientRevision_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 client_revision = 1 [default = -1];</code>
-       */
-      public Builder clearClientRevision() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        clientRevision_ = -1L;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.LazyStringList path_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensurePathIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          path_ = new com.google.protobuf.LazyStringArrayList(path_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public com.google.protobuf.ProtocolStringList
-          getPathList() {
-        return path_.getUnmodifiableView();
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public int getPathCount() {
-        return path_.size();
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public java.lang.String getPath(int index) {
-        return path_.get(index);
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getPathBytes(int index) {
-        return path_.getByteString(index);
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public Builder setPath(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
-        path_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public Builder addPath(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
-        path_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public Builder addAllPath(
-          java.lang.Iterable<java.lang.String> values) {
-        ensurePathIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, path_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public Builder clearPath() {
-        path_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string path = 2;</code>
-       */
-      public Builder addPathBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
-        path_.add(value);
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:jahop.messages.SnapshotRequest)
-    }
-
-    static {
-      defaultInstance = new SnapshotRequest(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:jahop.messages.SnapshotRequest)
-  }
-
-  public interface UpdateRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:jahop.messages.UpdateRequest)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required int64 client_revision = 1;</code>
-     */
-    boolean hasClientRevision();
-    /**
-     * <code>required int64 client_revision = 1;</code>
-     */
-    long getClientRevision();
-
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> 
         getEntrySetList();
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     com.jahop.common.msg.proto.Messages.EntrySet getEntrySet(int index);
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     int getEntrySetCount();
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     java.util.List<? extends com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> 
         getEntrySetOrBuilderList();
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     com.jahop.common.msg.proto.Messages.EntrySetOrBuilder getEntrySetOrBuilder(
         int index);
+
+    /**
+     * <code>optional string author = 2;</code>
+     */
+    boolean hasAuthor();
+    /**
+     * <code>optional string author = 2;</code>
+     */
+    java.lang.String getAuthor();
+    /**
+     * <code>optional string author = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getAuthorBytes();
 
     /**
      * <code>optional string comment = 3;</code>
@@ -646,1429 +63,6 @@ public final class Messages {
      */
     com.google.protobuf.ByteString
         getCommentBytes();
-  }
-  /**
-   * Protobuf type {@code jahop.messages.UpdateRequest}
-   */
-  public static final class UpdateRequest extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:jahop.messages.UpdateRequest)
-      UpdateRequestOrBuilder {
-    // Use UpdateRequest.newBuilder() to construct.
-    private UpdateRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private UpdateRequest(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final UpdateRequest defaultInstance;
-    public static UpdateRequest getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public UpdateRequest getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private UpdateRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              clientRevision_ = input.readInt64();
-              break;
-            }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                entrySet_ = new java.util.ArrayList<com.jahop.common.msg.proto.Messages.EntrySet>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              entrySet_.add(input.readMessage(com.jahop.common.msg.proto.Messages.EntrySet.PARSER, extensionRegistry));
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              comment_ = bs;
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          entrySet_ = java.util.Collections.unmodifiableList(entrySet_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_UpdateRequest_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_UpdateRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.jahop.common.msg.proto.Messages.UpdateRequest.class, com.jahop.common.msg.proto.Messages.UpdateRequest.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<UpdateRequest> PARSER =
-        new com.google.protobuf.AbstractParser<UpdateRequest>() {
-      public UpdateRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UpdateRequest(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<UpdateRequest> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    public static final int CLIENT_REVISION_FIELD_NUMBER = 1;
-    private long clientRevision_;
-    /**
-     * <code>required int64 client_revision = 1;</code>
-     */
-    public boolean hasClientRevision() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required int64 client_revision = 1;</code>
-     */
-    public long getClientRevision() {
-      return clientRevision_;
-    }
-
-    public static final int ENTRY_SET_FIELD_NUMBER = 2;
-    private java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> entrySet_;
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    public java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> getEntrySetList() {
-      return entrySet_;
-    }
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    public java.util.List<? extends com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> 
-        getEntrySetOrBuilderList() {
-      return entrySet_;
-    }
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    public int getEntrySetCount() {
-      return entrySet_.size();
-    }
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    public com.jahop.common.msg.proto.Messages.EntrySet getEntrySet(int index) {
-      return entrySet_.get(index);
-    }
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    public com.jahop.common.msg.proto.Messages.EntrySetOrBuilder getEntrySetOrBuilder(
-        int index) {
-      return entrySet_.get(index);
-    }
-
-    public static final int COMMENT_FIELD_NUMBER = 3;
-    private java.lang.Object comment_;
-    /**
-     * <code>optional string comment = 3;</code>
-     */
-    public boolean hasComment() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional string comment = 3;</code>
-     */
-    public java.lang.String getComment() {
-      java.lang.Object ref = comment_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          comment_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string comment = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getCommentBytes() {
-      java.lang.Object ref = comment_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        comment_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private void initFields() {
-      clientRevision_ = 0L;
-      entrySet_ = java.util.Collections.emptyList();
-      comment_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasClientRevision()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      for (int i = 0; i < getEntrySetCount(); i++) {
-        if (!getEntrySet(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt64(1, clientRevision_);
-      }
-      for (int i = 0; i < entrySet_.size(); i++) {
-        output.writeMessage(2, entrySet_.get(i));
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(3, getCommentBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, clientRevision_);
-      }
-      for (int i = 0; i < entrySet_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, entrySet_.get(i));
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getCommentBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.UpdateRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.jahop.common.msg.proto.Messages.UpdateRequest prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code jahop.messages.UpdateRequest}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:jahop.messages.UpdateRequest)
-        com.jahop.common.msg.proto.Messages.UpdateRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_UpdateRequest_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_UpdateRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.jahop.common.msg.proto.Messages.UpdateRequest.class, com.jahop.common.msg.proto.Messages.UpdateRequest.Builder.class);
-      }
-
-      // Construct using com.jahop.common.msg.proto.Messages.UpdateRequest.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getEntrySetFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        clientRevision_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (entrySetBuilder_ == null) {
-          entrySet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-        } else {
-          entrySetBuilder_.clear();
-        }
-        comment_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_UpdateRequest_descriptor;
-      }
-
-      public com.jahop.common.msg.proto.Messages.UpdateRequest getDefaultInstanceForType() {
-        return com.jahop.common.msg.proto.Messages.UpdateRequest.getDefaultInstance();
-      }
-
-      public com.jahop.common.msg.proto.Messages.UpdateRequest build() {
-        com.jahop.common.msg.proto.Messages.UpdateRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.jahop.common.msg.proto.Messages.UpdateRequest buildPartial() {
-        com.jahop.common.msg.proto.Messages.UpdateRequest result = new com.jahop.common.msg.proto.Messages.UpdateRequest(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.clientRevision_ = clientRevision_;
-        if (entrySetBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            entrySet_ = java.util.Collections.unmodifiableList(entrySet_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.entrySet_ = entrySet_;
-        } else {
-          result.entrySet_ = entrySetBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.comment_ = comment_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.jahop.common.msg.proto.Messages.UpdateRequest) {
-          return mergeFrom((com.jahop.common.msg.proto.Messages.UpdateRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.jahop.common.msg.proto.Messages.UpdateRequest other) {
-        if (other == com.jahop.common.msg.proto.Messages.UpdateRequest.getDefaultInstance()) return this;
-        if (other.hasClientRevision()) {
-          setClientRevision(other.getClientRevision());
-        }
-        if (entrySetBuilder_ == null) {
-          if (!other.entrySet_.isEmpty()) {
-            if (entrySet_.isEmpty()) {
-              entrySet_ = other.entrySet_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureEntrySetIsMutable();
-              entrySet_.addAll(other.entrySet_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.entrySet_.isEmpty()) {
-            if (entrySetBuilder_.isEmpty()) {
-              entrySetBuilder_.dispose();
-              entrySetBuilder_ = null;
-              entrySet_ = other.entrySet_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              entrySetBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getEntrySetFieldBuilder() : null;
-            } else {
-              entrySetBuilder_.addAllMessages(other.entrySet_);
-            }
-          }
-        }
-        if (other.hasComment()) {
-          bitField0_ |= 0x00000004;
-          comment_ = other.comment_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasClientRevision()) {
-          
-          return false;
-        }
-        for (int i = 0; i < getEntrySetCount(); i++) {
-          if (!getEntrySet(i).isInitialized()) {
-            
-            return false;
-          }
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.jahop.common.msg.proto.Messages.UpdateRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.jahop.common.msg.proto.Messages.UpdateRequest) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private long clientRevision_ ;
-      /**
-       * <code>required int64 client_revision = 1;</code>
-       */
-      public boolean hasClientRevision() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required int64 client_revision = 1;</code>
-       */
-      public long getClientRevision() {
-        return clientRevision_;
-      }
-      /**
-       * <code>required int64 client_revision = 1;</code>
-       */
-      public Builder setClientRevision(long value) {
-        bitField0_ |= 0x00000001;
-        clientRevision_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int64 client_revision = 1;</code>
-       */
-      public Builder clearClientRevision() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        clientRevision_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> entrySet_ =
-        java.util.Collections.emptyList();
-      private void ensureEntrySetIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          entrySet_ = new java.util.ArrayList<com.jahop.common.msg.proto.Messages.EntrySet>(entrySet_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.jahop.common.msg.proto.Messages.EntrySet, com.jahop.common.msg.proto.Messages.EntrySet.Builder, com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> entrySetBuilder_;
-
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> getEntrySetList() {
-        if (entrySetBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(entrySet_);
-        } else {
-          return entrySetBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public int getEntrySetCount() {
-        if (entrySetBuilder_ == null) {
-          return entrySet_.size();
-        } else {
-          return entrySetBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.EntrySet getEntrySet(int index) {
-        if (entrySetBuilder_ == null) {
-          return entrySet_.get(index);
-        } else {
-          return entrySetBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder setEntrySet(
-          int index, com.jahop.common.msg.proto.Messages.EntrySet value) {
-        if (entrySetBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureEntrySetIsMutable();
-          entrySet_.set(index, value);
-          onChanged();
-        } else {
-          entrySetBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder setEntrySet(
-          int index, com.jahop.common.msg.proto.Messages.EntrySet.Builder builderForValue) {
-        if (entrySetBuilder_ == null) {
-          ensureEntrySetIsMutable();
-          entrySet_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          entrySetBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder addEntrySet(com.jahop.common.msg.proto.Messages.EntrySet value) {
-        if (entrySetBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureEntrySetIsMutable();
-          entrySet_.add(value);
-          onChanged();
-        } else {
-          entrySetBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder addEntrySet(
-          int index, com.jahop.common.msg.proto.Messages.EntrySet value) {
-        if (entrySetBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureEntrySetIsMutable();
-          entrySet_.add(index, value);
-          onChanged();
-        } else {
-          entrySetBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder addEntrySet(
-          com.jahop.common.msg.proto.Messages.EntrySet.Builder builderForValue) {
-        if (entrySetBuilder_ == null) {
-          ensureEntrySetIsMutable();
-          entrySet_.add(builderForValue.build());
-          onChanged();
-        } else {
-          entrySetBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder addEntrySet(
-          int index, com.jahop.common.msg.proto.Messages.EntrySet.Builder builderForValue) {
-        if (entrySetBuilder_ == null) {
-          ensureEntrySetIsMutable();
-          entrySet_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          entrySetBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder addAllEntrySet(
-          java.lang.Iterable<? extends com.jahop.common.msg.proto.Messages.EntrySet> values) {
-        if (entrySetBuilder_ == null) {
-          ensureEntrySetIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, entrySet_);
-          onChanged();
-        } else {
-          entrySetBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder clearEntrySet() {
-        if (entrySetBuilder_ == null) {
-          entrySet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          entrySetBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public Builder removeEntrySet(int index) {
-        if (entrySetBuilder_ == null) {
-          ensureEntrySetIsMutable();
-          entrySet_.remove(index);
-          onChanged();
-        } else {
-          entrySetBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.EntrySet.Builder getEntrySetBuilder(
-          int index) {
-        return getEntrySetFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.EntrySetOrBuilder getEntrySetOrBuilder(
-          int index) {
-        if (entrySetBuilder_ == null) {
-          return entrySet_.get(index);  } else {
-          return entrySetBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public java.util.List<? extends com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> 
-           getEntrySetOrBuilderList() {
-        if (entrySetBuilder_ != null) {
-          return entrySetBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(entrySet_);
-        }
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.EntrySet.Builder addEntrySetBuilder() {
-        return getEntrySetFieldBuilder().addBuilder(
-            com.jahop.common.msg.proto.Messages.EntrySet.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.EntrySet.Builder addEntrySetBuilder(
-          int index) {
-        return getEntrySetFieldBuilder().addBuilder(
-            index, com.jahop.common.msg.proto.Messages.EntrySet.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-       */
-      public java.util.List<com.jahop.common.msg.proto.Messages.EntrySet.Builder> 
-           getEntrySetBuilderList() {
-        return getEntrySetFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.jahop.common.msg.proto.Messages.EntrySet, com.jahop.common.msg.proto.Messages.EntrySet.Builder, com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> 
-          getEntrySetFieldBuilder() {
-        if (entrySetBuilder_ == null) {
-          entrySetBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              com.jahop.common.msg.proto.Messages.EntrySet, com.jahop.common.msg.proto.Messages.EntrySet.Builder, com.jahop.common.msg.proto.Messages.EntrySetOrBuilder>(
-                  entrySet_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
-                  getParentForChildren(),
-                  isClean());
-          entrySet_ = null;
-        }
-        return entrySetBuilder_;
-      }
-
-      private java.lang.Object comment_ = "";
-      /**
-       * <code>optional string comment = 3;</code>
-       */
-      public boolean hasComment() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string comment = 3;</code>
-       */
-      public java.lang.String getComment() {
-        java.lang.Object ref = comment_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            comment_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string comment = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getCommentBytes() {
-        java.lang.Object ref = comment_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          comment_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string comment = 3;</code>
-       */
-      public Builder setComment(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        comment_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string comment = 3;</code>
-       */
-      public Builder clearComment() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        comment_ = getDefaultInstance().getComment();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string comment = 3;</code>
-       */
-      public Builder setCommentBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        comment_ = value;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:jahop.messages.UpdateRequest)
-    }
-
-    static {
-      defaultInstance = new UpdateRequest(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:jahop.messages.UpdateRequest)
-  }
-
-  public interface HeaderOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:jahop.messages.Header)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required int64 revision = 1;</code>
-     */
-    boolean hasRevision();
-    /**
-     * <code>required int64 revision = 1;</code>
-     */
-    long getRevision();
-
-    /**
-     * <code>required int32 request_source_id = 2;</code>
-     */
-    boolean hasRequestSourceId();
-    /**
-     * <code>required int32 request_source_id = 2;</code>
-     */
-    int getRequestSourceId();
-  }
-  /**
-   * Protobuf type {@code jahop.messages.Header}
-   *
-   * <pre>
-   * messages from server
-   * </pre>
-   */
-  public static final class Header extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:jahop.messages.Header)
-      HeaderOrBuilder {
-    // Use Header.newBuilder() to construct.
-    private Header(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private Header(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final Header defaultInstance;
-    public static Header getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public Header getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private Header(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              revision_ = input.readInt64();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              requestSourceId_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_Header_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_Header_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.jahop.common.msg.proto.Messages.Header.class, com.jahop.common.msg.proto.Messages.Header.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<Header> PARSER =
-        new com.google.protobuf.AbstractParser<Header>() {
-      public Header parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Header(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Header> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    public static final int REVISION_FIELD_NUMBER = 1;
-    private long revision_;
-    /**
-     * <code>required int64 revision = 1;</code>
-     */
-    public boolean hasRevision() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required int64 revision = 1;</code>
-     */
-    public long getRevision() {
-      return revision_;
-    }
-
-    public static final int REQUEST_SOURCE_ID_FIELD_NUMBER = 2;
-    private int requestSourceId_;
-    /**
-     * <code>required int32 request_source_id = 2;</code>
-     */
-    public boolean hasRequestSourceId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required int32 request_source_id = 2;</code>
-     */
-    public int getRequestSourceId() {
-      return requestSourceId_;
-    }
-
-    private void initFields() {
-      revision_ = 0L;
-      requestSourceId_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasRevision()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasRequestSourceId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt64(1, revision_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, requestSourceId_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, revision_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, requestSourceId_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.jahop.common.msg.proto.Messages.Header parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.jahop.common.msg.proto.Messages.Header prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code jahop.messages.Header}
-     *
-     * <pre>
-     * messages from server
-     * </pre>
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:jahop.messages.Header)
-        com.jahop.common.msg.proto.Messages.HeaderOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_Header_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_Header_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.jahop.common.msg.proto.Messages.Header.class, com.jahop.common.msg.proto.Messages.Header.Builder.class);
-      }
-
-      // Construct using com.jahop.common.msg.proto.Messages.Header.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        revision_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        requestSourceId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.jahop.common.msg.proto.Messages.internal_static_jahop_messages_Header_descriptor;
-      }
-
-      public com.jahop.common.msg.proto.Messages.Header getDefaultInstanceForType() {
-        return com.jahop.common.msg.proto.Messages.Header.getDefaultInstance();
-      }
-
-      public com.jahop.common.msg.proto.Messages.Header build() {
-        com.jahop.common.msg.proto.Messages.Header result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.jahop.common.msg.proto.Messages.Header buildPartial() {
-        com.jahop.common.msg.proto.Messages.Header result = new com.jahop.common.msg.proto.Messages.Header(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.revision_ = revision_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.requestSourceId_ = requestSourceId_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.jahop.common.msg.proto.Messages.Header) {
-          return mergeFrom((com.jahop.common.msg.proto.Messages.Header)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.jahop.common.msg.proto.Messages.Header other) {
-        if (other == com.jahop.common.msg.proto.Messages.Header.getDefaultInstance()) return this;
-        if (other.hasRevision()) {
-          setRevision(other.getRevision());
-        }
-        if (other.hasRequestSourceId()) {
-          setRequestSourceId(other.getRequestSourceId());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasRevision()) {
-          
-          return false;
-        }
-        if (!hasRequestSourceId()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.jahop.common.msg.proto.Messages.Header parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.jahop.common.msg.proto.Messages.Header) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private long revision_ ;
-      /**
-       * <code>required int64 revision = 1;</code>
-       */
-      public boolean hasRevision() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required int64 revision = 1;</code>
-       */
-      public long getRevision() {
-        return revision_;
-      }
-      /**
-       * <code>required int64 revision = 1;</code>
-       */
-      public Builder setRevision(long value) {
-        bitField0_ |= 0x00000001;
-        revision_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int64 revision = 1;</code>
-       */
-      public Builder clearRevision() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        revision_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private int requestSourceId_ ;
-      /**
-       * <code>required int32 request_source_id = 2;</code>
-       */
-      public boolean hasRequestSourceId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required int32 request_source_id = 2;</code>
-       */
-      public int getRequestSourceId() {
-        return requestSourceId_;
-      }
-      /**
-       * <code>required int32 request_source_id = 2;</code>
-       */
-      public Builder setRequestSourceId(int value) {
-        bitField0_ |= 0x00000002;
-        requestSourceId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int32 request_source_id = 2;</code>
-       */
-      public Builder clearRequestSourceId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        requestSourceId_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:jahop.messages.Header)
-    }
-
-    static {
-      defaultInstance = new Header(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:jahop.messages.Header)
-  }
-
-  public interface UpdateOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:jahop.messages.Update)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required .jahop.messages.Header header = 1;</code>
-     */
-    boolean hasHeader();
-    /**
-     * <code>required .jahop.messages.Header header = 1;</code>
-     */
-    com.jahop.common.msg.proto.Messages.Header getHeader();
-    /**
-     * <code>required .jahop.messages.Header header = 1;</code>
-     */
-    com.jahop.common.msg.proto.Messages.HeaderOrBuilder getHeaderOrBuilder();
-
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> 
-        getEntrySetList();
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    com.jahop.common.msg.proto.Messages.EntrySet getEntrySet(int index);
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    int getEntrySetCount();
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    java.util.List<? extends com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> 
-        getEntrySetOrBuilderList();
-    /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
-     */
-    com.jahop.common.msg.proto.Messages.EntrySetOrBuilder getEntrySetOrBuilder(
-        int index);
   }
   /**
    * Protobuf type {@code jahop.messages.Update}
@@ -2123,24 +117,23 @@ public final class Messages {
               break;
             }
             case 10: {
-              com.jahop.common.msg.proto.Messages.Header.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) == 0x00000001)) {
-                subBuilder = header_.toBuilder();
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                entrySet_ = new java.util.ArrayList<com.jahop.common.msg.proto.Messages.EntrySet>();
+                mutable_bitField0_ |= 0x00000001;
               }
-              header_ = input.readMessage(com.jahop.common.msg.proto.Messages.Header.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(header_);
-                header_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
+              entrySet_.add(input.readMessage(com.jahop.common.msg.proto.Messages.EntrySet.PARSER, extensionRegistry));
               break;
             }
             case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                entrySet_ = new java.util.ArrayList<com.jahop.common.msg.proto.Messages.EntrySet>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              entrySet_.add(input.readMessage(com.jahop.common.msg.proto.Messages.EntrySet.PARSER, extensionRegistry));
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              author_ = bs;
+              break;
+            }
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000002;
+              comment_ = bs;
               break;
             }
           }
@@ -2151,7 +144,7 @@ public final class Messages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           entrySet_ = java.util.Collections.unmodifiableList(entrySet_);
         }
         this.unknownFields = unknownFields.build();
@@ -2186,65 +179,129 @@ public final class Messages {
     }
 
     private int bitField0_;
-    public static final int HEADER_FIELD_NUMBER = 1;
-    private com.jahop.common.msg.proto.Messages.Header header_;
-    /**
-     * <code>required .jahop.messages.Header header = 1;</code>
-     */
-    public boolean hasHeader() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required .jahop.messages.Header header = 1;</code>
-     */
-    public com.jahop.common.msg.proto.Messages.Header getHeader() {
-      return header_;
-    }
-    /**
-     * <code>required .jahop.messages.Header header = 1;</code>
-     */
-    public com.jahop.common.msg.proto.Messages.HeaderOrBuilder getHeaderOrBuilder() {
-      return header_;
-    }
-
-    public static final int ENTRY_SET_FIELD_NUMBER = 2;
+    public static final int ENTRY_SET_FIELD_NUMBER = 1;
     private java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> entrySet_;
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     public java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> getEntrySetList() {
       return entrySet_;
     }
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     public java.util.List<? extends com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> 
         getEntrySetOrBuilderList() {
       return entrySet_;
     }
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     public int getEntrySetCount() {
       return entrySet_.size();
     }
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     public com.jahop.common.msg.proto.Messages.EntrySet getEntrySet(int index) {
       return entrySet_.get(index);
     }
     /**
-     * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+     * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
      */
     public com.jahop.common.msg.proto.Messages.EntrySetOrBuilder getEntrySetOrBuilder(
         int index) {
       return entrySet_.get(index);
     }
 
+    public static final int AUTHOR_FIELD_NUMBER = 2;
+    private java.lang.Object author_;
+    /**
+     * <code>optional string author = 2;</code>
+     */
+    public boolean hasAuthor() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional string author = 2;</code>
+     */
+    public java.lang.String getAuthor() {
+      java.lang.Object ref = author_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          author_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string author = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAuthorBytes() {
+      java.lang.Object ref = author_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        author_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int COMMENT_FIELD_NUMBER = 3;
+    private java.lang.Object comment_;
+    /**
+     * <code>optional string comment = 3;</code>
+     */
+    public boolean hasComment() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string comment = 3;</code>
+     */
+    public java.lang.String getComment() {
+      java.lang.Object ref = comment_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          comment_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string comment = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCommentBytes() {
+      java.lang.Object ref = comment_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        comment_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
-      header_ = com.jahop.common.msg.proto.Messages.Header.getDefaultInstance();
       entrySet_ = java.util.Collections.emptyList();
+      author_ = "";
+      comment_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2252,14 +309,6 @@ public final class Messages {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasHeader()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!getHeader().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       for (int i = 0; i < getEntrySetCount(); i++) {
         if (!getEntrySet(i).isInitialized()) {
           memoizedIsInitialized = 0;
@@ -2273,11 +322,14 @@ public final class Messages {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(1, header_);
-      }
       for (int i = 0; i < entrySet_.size(); i++) {
-        output.writeMessage(2, entrySet_.get(i));
+        output.writeMessage(1, entrySet_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(2, getAuthorBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(3, getCommentBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2288,13 +340,17 @@ public final class Messages {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, header_);
-      }
       for (int i = 0; i < entrySet_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, entrySet_.get(i));
+          .computeMessageSize(1, entrySet_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getAuthorBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getCommentBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2405,7 +461,6 @@ public final class Messages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getHeaderFieldBuilder();
           getEntrySetFieldBuilder();
         }
       }
@@ -2415,18 +470,16 @@ public final class Messages {
 
       public Builder clear() {
         super.clear();
-        if (headerBuilder_ == null) {
-          header_ = com.jahop.common.msg.proto.Messages.Header.getDefaultInstance();
-        } else {
-          headerBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000001);
         if (entrySetBuilder_ == null) {
           entrySet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           entrySetBuilder_.clear();
         }
+        author_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        comment_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -2455,23 +508,23 @@ public final class Messages {
         com.jahop.common.msg.proto.Messages.Update result = new com.jahop.common.msg.proto.Messages.Update(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        if (headerBuilder_ == null) {
-          result.header_ = header_;
-        } else {
-          result.header_ = headerBuilder_.build();
-        }
         if (entrySetBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
             entrySet_ = java.util.Collections.unmodifiableList(entrySet_);
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           }
           result.entrySet_ = entrySet_;
         } else {
           result.entrySet_ = entrySetBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.author_ = author_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.comment_ = comment_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2488,14 +541,11 @@ public final class Messages {
 
       public Builder mergeFrom(com.jahop.common.msg.proto.Messages.Update other) {
         if (other == com.jahop.common.msg.proto.Messages.Update.getDefaultInstance()) return this;
-        if (other.hasHeader()) {
-          mergeHeader(other.getHeader());
-        }
         if (entrySetBuilder_ == null) {
           if (!other.entrySet_.isEmpty()) {
             if (entrySet_.isEmpty()) {
               entrySet_ = other.entrySet_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000001);
             } else {
               ensureEntrySetIsMutable();
               entrySet_.addAll(other.entrySet_);
@@ -2508,7 +558,7 @@ public final class Messages {
               entrySetBuilder_.dispose();
               entrySetBuilder_ = null;
               entrySet_ = other.entrySet_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000001);
               entrySetBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getEntrySetFieldBuilder() : null;
@@ -2517,19 +567,21 @@ public final class Messages {
             }
           }
         }
+        if (other.hasAuthor()) {
+          bitField0_ |= 0x00000002;
+          author_ = other.author_;
+          onChanged();
+        }
+        if (other.hasComment()) {
+          bitField0_ |= 0x00000004;
+          comment_ = other.comment_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasHeader()) {
-          
-          return false;
-        }
-        if (!getHeader().isInitialized()) {
-          
-          return false;
-        }
         for (int i = 0; i < getEntrySetCount(); i++) {
           if (!getEntrySet(i).isInitialized()) {
             
@@ -2558,128 +610,12 @@ public final class Messages {
       }
       private int bitField0_;
 
-      private com.jahop.common.msg.proto.Messages.Header header_ = com.jahop.common.msg.proto.Messages.Header.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          com.jahop.common.msg.proto.Messages.Header, com.jahop.common.msg.proto.Messages.Header.Builder, com.jahop.common.msg.proto.Messages.HeaderOrBuilder> headerBuilder_;
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public boolean hasHeader() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.Header getHeader() {
-        if (headerBuilder_ == null) {
-          return header_;
-        } else {
-          return headerBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public Builder setHeader(com.jahop.common.msg.proto.Messages.Header value) {
-        if (headerBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          header_ = value;
-          onChanged();
-        } else {
-          headerBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000001;
-        return this;
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public Builder setHeader(
-          com.jahop.common.msg.proto.Messages.Header.Builder builderForValue) {
-        if (headerBuilder_ == null) {
-          header_ = builderForValue.build();
-          onChanged();
-        } else {
-          headerBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000001;
-        return this;
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public Builder mergeHeader(com.jahop.common.msg.proto.Messages.Header value) {
-        if (headerBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              header_ != com.jahop.common.msg.proto.Messages.Header.getDefaultInstance()) {
-            header_ =
-              com.jahop.common.msg.proto.Messages.Header.newBuilder(header_).mergeFrom(value).buildPartial();
-          } else {
-            header_ = value;
-          }
-          onChanged();
-        } else {
-          headerBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000001;
-        return this;
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public Builder clearHeader() {
-        if (headerBuilder_ == null) {
-          header_ = com.jahop.common.msg.proto.Messages.Header.getDefaultInstance();
-          onChanged();
-        } else {
-          headerBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000001);
-        return this;
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.Header.Builder getHeaderBuilder() {
-        bitField0_ |= 0x00000001;
-        onChanged();
-        return getHeaderFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      public com.jahop.common.msg.proto.Messages.HeaderOrBuilder getHeaderOrBuilder() {
-        if (headerBuilder_ != null) {
-          return headerBuilder_.getMessageOrBuilder();
-        } else {
-          return header_;
-        }
-      }
-      /**
-       * <code>required .jahop.messages.Header header = 1;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          com.jahop.common.msg.proto.Messages.Header, com.jahop.common.msg.proto.Messages.Header.Builder, com.jahop.common.msg.proto.Messages.HeaderOrBuilder> 
-          getHeaderFieldBuilder() {
-        if (headerBuilder_ == null) {
-          headerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              com.jahop.common.msg.proto.Messages.Header, com.jahop.common.msg.proto.Messages.Header.Builder, com.jahop.common.msg.proto.Messages.HeaderOrBuilder>(
-                  getHeader(),
-                  getParentForChildren(),
-                  isClean());
-          header_ = null;
-        }
-        return headerBuilder_;
-      }
-
       private java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> entrySet_ =
         java.util.Collections.emptyList();
       private void ensureEntrySetIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           entrySet_ = new java.util.ArrayList<com.jahop.common.msg.proto.Messages.EntrySet>(entrySet_);
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000001;
          }
       }
 
@@ -2687,7 +623,7 @@ public final class Messages {
           com.jahop.common.msg.proto.Messages.EntrySet, com.jahop.common.msg.proto.Messages.EntrySet.Builder, com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> entrySetBuilder_;
 
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public java.util.List<com.jahop.common.msg.proto.Messages.EntrySet> getEntrySetList() {
         if (entrySetBuilder_ == null) {
@@ -2697,7 +633,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public int getEntrySetCount() {
         if (entrySetBuilder_ == null) {
@@ -2707,7 +643,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public com.jahop.common.msg.proto.Messages.EntrySet getEntrySet(int index) {
         if (entrySetBuilder_ == null) {
@@ -2717,7 +653,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder setEntrySet(
           int index, com.jahop.common.msg.proto.Messages.EntrySet value) {
@@ -2734,7 +670,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder setEntrySet(
           int index, com.jahop.common.msg.proto.Messages.EntrySet.Builder builderForValue) {
@@ -2748,7 +684,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder addEntrySet(com.jahop.common.msg.proto.Messages.EntrySet value) {
         if (entrySetBuilder_ == null) {
@@ -2764,7 +700,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder addEntrySet(
           int index, com.jahop.common.msg.proto.Messages.EntrySet value) {
@@ -2781,7 +717,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder addEntrySet(
           com.jahop.common.msg.proto.Messages.EntrySet.Builder builderForValue) {
@@ -2795,7 +731,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder addEntrySet(
           int index, com.jahop.common.msg.proto.Messages.EntrySet.Builder builderForValue) {
@@ -2809,7 +745,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder addAllEntrySet(
           java.lang.Iterable<? extends com.jahop.common.msg.proto.Messages.EntrySet> values) {
@@ -2824,12 +760,12 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder clearEntrySet() {
         if (entrySetBuilder_ == null) {
           entrySet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
           entrySetBuilder_.clear();
@@ -2837,7 +773,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public Builder removeEntrySet(int index) {
         if (entrySetBuilder_ == null) {
@@ -2850,14 +786,14 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public com.jahop.common.msg.proto.Messages.EntrySet.Builder getEntrySetBuilder(
           int index) {
         return getEntrySetFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public com.jahop.common.msg.proto.Messages.EntrySetOrBuilder getEntrySetOrBuilder(
           int index) {
@@ -2867,7 +803,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public java.util.List<? extends com.jahop.common.msg.proto.Messages.EntrySetOrBuilder> 
            getEntrySetOrBuilderList() {
@@ -2878,14 +814,14 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public com.jahop.common.msg.proto.Messages.EntrySet.Builder addEntrySetBuilder() {
         return getEntrySetFieldBuilder().addBuilder(
             com.jahop.common.msg.proto.Messages.EntrySet.getDefaultInstance());
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public com.jahop.common.msg.proto.Messages.EntrySet.Builder addEntrySetBuilder(
           int index) {
@@ -2893,7 +829,7 @@ public final class Messages {
             index, com.jahop.common.msg.proto.Messages.EntrySet.getDefaultInstance());
       }
       /**
-       * <code>repeated .jahop.messages.EntrySet entry_set = 2;</code>
+       * <code>repeated .jahop.messages.EntrySet entry_set = 1;</code>
        */
       public java.util.List<com.jahop.common.msg.proto.Messages.EntrySet.Builder> 
            getEntrySetBuilderList() {
@@ -2906,12 +842,164 @@ public final class Messages {
           entrySetBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.jahop.common.msg.proto.Messages.EntrySet, com.jahop.common.msg.proto.Messages.EntrySet.Builder, com.jahop.common.msg.proto.Messages.EntrySetOrBuilder>(
                   entrySet_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
                   isClean());
           entrySet_ = null;
         }
         return entrySetBuilder_;
+      }
+
+      private java.lang.Object author_ = "";
+      /**
+       * <code>optional string author = 2;</code>
+       */
+      public boolean hasAuthor() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string author = 2;</code>
+       */
+      public java.lang.String getAuthor() {
+        java.lang.Object ref = author_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            author_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string author = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAuthorBytes() {
+        java.lang.Object ref = author_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          author_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string author = 2;</code>
+       */
+      public Builder setAuthor(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        author_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string author = 2;</code>
+       */
+      public Builder clearAuthor() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        author_ = getDefaultInstance().getAuthor();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string author = 2;</code>
+       */
+      public Builder setAuthorBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        author_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object comment_ = "";
+      /**
+       * <code>optional string comment = 3;</code>
+       */
+      public boolean hasComment() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string comment = 3;</code>
+       */
+      public java.lang.String getComment() {
+        java.lang.Object ref = comment_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            comment_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string comment = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCommentBytes() {
+        java.lang.Object ref = comment_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          comment_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string comment = 3;</code>
+       */
+      public Builder setComment(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        comment_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string comment = 3;</code>
+       */
+      public Builder clearComment() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        comment_ = getDefaultInstance().getComment();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string comment = 3;</code>
+       */
+      public Builder setCommentBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        comment_ = value;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:jahop.messages.Update)
@@ -2969,10 +1057,6 @@ public final class Messages {
   }
   /**
    * Protobuf type {@code jahop.messages.EntrySet}
-   *
-   * <pre>
-   * shared part
-   * </pre>
    */
   public static final class EntrySet extends
       com.google.protobuf.GeneratedMessage implements
@@ -3287,10 +1371,6 @@ public final class Messages {
     }
     /**
      * Protobuf type {@code jahop.messages.EntrySet}
-     *
-     * <pre>
-     * shared part
-     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
@@ -4608,21 +2688,6 @@ public final class Messages {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_jahop_messages_SnapshotRequest_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_jahop_messages_SnapshotRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_jahop_messages_UpdateRequest_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_jahop_messages_UpdateRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_jahop_messages_Header_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_jahop_messages_Header_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_jahop_messages_Update_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -4646,21 +2711,15 @@ public final class Messages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\016Messages.proto\022\016jahop.messages\"<\n\017Snap" +
-      "shotRequest\022\033\n\017client_revision\030\001 \001(\003:\002-1" +
-      "\022\014\n\004path\030\002 \003(\t\"f\n\rUpdateRequest\022\027\n\017clien" +
-      "t_revision\030\001 \002(\003\022+\n\tentry_set\030\002 \003(\0132\030.ja" +
-      "hop.messages.EntrySet\022\017\n\007comment\030\003 \001(\t\"5" +
-      "\n\006Header\022\020\n\010revision\030\001 \002(\003\022\031\n\021request_so" +
-      "urce_id\030\002 \002(\005\"]\n\006Update\022&\n\006header\030\001 \002(\0132" +
-      "\026.jahop.messages.Header\022+\n\tentry_set\030\002 \003" +
-      "(\0132\030.jahop.messages.EntrySet\">\n\010EntrySet" +
-      "\022\014\n\004path\030\001 \002(\t\022$\n\005entry\030\002 \003(\0132\025.jahop.me",
-      "ssages.Entry\"{\n\005Entry\022\013\n\003key\030\001 \002(\t\022\r\n\005va" +
-      "lue\030\002 \002(\t\0224\n\006action\030\003 \001(\0162\034.jahop.messag" +
-      "es.Entry.Action:\006UPDATE\" \n\006Action\022\n\n\006UPD" +
-      "ATE\020\000\022\n\n\006DELETE\020\001B\034\n\032com.jahop.common.ms" +
-      "g.proto"
+      "\n\016Messages.proto\022\016jahop.messages\"V\n\006Upda" +
+      "te\022+\n\tentry_set\030\001 \003(\0132\030.jahop.messages.E" +
+      "ntrySet\022\016\n\006author\030\002 \001(\t\022\017\n\007comment\030\003 \001(\t" +
+      "\">\n\010EntrySet\022\014\n\004path\030\001 \002(\t\022$\n\005entry\030\002 \003(" +
+      "\0132\025.jahop.messages.Entry\"{\n\005Entry\022\013\n\003key" +
+      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\0224\n\006action\030\003 \001(\0162\034." +
+      "jahop.messages.Entry.Action:\006UPDATE\" \n\006A" +
+      "ction\022\n\n\006UPDATE\020\000\022\n\n\006DELETE\020\001B\034\n\032com.jah" +
+      "op.common.msg.proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4674,38 +2733,20 @@ public final class Messages {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_jahop_messages_SnapshotRequest_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_jahop_messages_SnapshotRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_jahop_messages_SnapshotRequest_descriptor,
-        new java.lang.String[] { "ClientRevision", "Path", });
-    internal_static_jahop_messages_UpdateRequest_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_jahop_messages_UpdateRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_jahop_messages_UpdateRequest_descriptor,
-        new java.lang.String[] { "ClientRevision", "EntrySet", "Comment", });
-    internal_static_jahop_messages_Header_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_jahop_messages_Header_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_jahop_messages_Header_descriptor,
-        new java.lang.String[] { "Revision", "RequestSourceId", });
     internal_static_jahop_messages_Update_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(0);
     internal_static_jahop_messages_Update_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_jahop_messages_Update_descriptor,
-        new java.lang.String[] { "Header", "EntrySet", });
+        new java.lang.String[] { "EntrySet", "Author", "Comment", });
     internal_static_jahop_messages_EntrySet_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(1);
     internal_static_jahop_messages_EntrySet_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_jahop_messages_EntrySet_descriptor,
         new java.lang.String[] { "Path", "Entry", });
     internal_static_jahop_messages_Entry_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_jahop_messages_Entry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_jahop_messages_Entry_descriptor,

@@ -2,30 +2,12 @@ package jahop.messages;
 
 option java_package = "com.jahop.common.msg.proto";
 
-// messages from client
-message SnapshotRequest {
-    optional int64 client_revision = 1 [default = -1];
-    repeated string path = 2;
-}
-
-message UpdateRequest {
-    required int64 client_revision = 1;
-    repeated EntrySet entry_set = 2;
+message Update {
+    repeated EntrySet entry_set = 1;
+    optional string author = 2;
     optional string comment = 3;
 }
 
-// messages from server
-message Header {
-    required int64 revision = 1;
-    required int32 request_source_id = 2;
-}
-
-message Update {
-    required Header header = 1;
-    repeated EntrySet entry_set = 2;
-}
-
-// shared part
 message EntrySet {
     required string path = 1;
     repeated Entry entry = 2;

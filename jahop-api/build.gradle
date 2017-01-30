@@ -20,4 +20,7 @@ uploadArchives {
 
 dependencies {
     compile project(":jahop-common")
+    compile("commons-lang:commons-lang:2.6")
+    compile("com.google.guava:guava:18.0")
+    compile("com.lmax:disruptor:3.3.4")
 }

@@ -2,6 +2,9 @@ package com.jahop.common.msg;
 
 import java.nio.ByteBuffer;
 
+import static com.jahop.common.util.ByteUtils.read2LowerBytes;
+import static com.jahop.common.util.ByteUtils.write2LowerBytes;
+
 /**
  * Common header for all messages
  * Size: 32 bytes
@@ -9,28 +12,38 @@ import java.nio.ByteBuffer;
  */
 
 public final class MessageHeader {
-    public static final int SIZE = 32;      //Header size is 24 bytes
-    private short type;                     //  pos=0, size=2
-    private short version;                  //  pos=2, size=2
+    public static final int SIZE = 32;      //Header size is 32 bytes
+
+    private byte version;                   //  pos=0, size=1
+    private byte type;                      //  pos=1, size=1
+    private int bodySize;                   //  pos=2, size=2
     private int sourceId;                   //  pos=4, size=4
     private long seqNo;                     //  pos=8, size=8
     private long timestampMs;               //  pos=16, size=8
-//    private long reserved;                //  pos=24, size=8
+//    private long reserved;                 //  pos=24, size=8
 
-    public short getType() {
-        return type;
-    }
-
-    public void setType(short type) {
-        this.type = type;
-    }
-
-    public short getVersion() {
+    public byte getVersion() {
         return version;
     }
 
-    public void setVersion(short version) {
+    public void setVersion(byte version) {
         this.version = version;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
+    }
+
+    public int getBodySize() {
+        return bodySize;
+    }
+
+    public void setBodySize(int bodySize) {
+        this.bodySize = bodySize;
     }
 
     public int getSourceId() {
@@ -57,9 +70,19 @@ public final class MessageHeader {
         this.timestampMs = timestampMs;
     }
 
+    public void clear() {
+        setVersion((byte) 0);
+        setType((byte) 0);
+        setBodySize(0);
+        setSourceId(0);
+        setSeqNo(0);
+        setTimestampMs(0);
+    }
+
     public final void read(final ByteBuffer buffer) {
-        setType(buffer.getShort());
-        setVersion(buffer.getShort());
+        setVersion(buffer.get());
+        setType(buffer.get());
+        setBodySize(read2LowerBytes(buffer));
         setSourceId(buffer.getInt());
         setSeqNo(buffer.getLong());
         setTimestampMs(buffer.getLong());
@@ -67,8 +90,9 @@ public final class MessageHeader {
     }
 
     public final void write(final ByteBuffer buffer) {
-        buffer.putShort(getType());
-        buffer.putShort(getVersion());
+        buffer.put(getVersion());
+        buffer.put(getType());
+        write2LowerBytes(buffer, getBodySize());
         buffer.putInt(getSourceId());
         buffer.putLong(getSeqNo());
         buffer.putLong(getTimestampMs());
@@ -78,8 +102,9 @@ public final class MessageHeader {
     @Override
     public String toString() {
         return "MessageHeader{" +
-                "type=" + MessageType.toString(type) +
-                ", version=" + version +
+                "version=" + version +
+                ", type=" + MessageType.toString(type) +
+                ", bodySize=" + bodySize +
                 ", sourceId=" + sourceId +
                 ", seqNo=" + seqNo +
                 ", timestampMs=" + timestampMs +

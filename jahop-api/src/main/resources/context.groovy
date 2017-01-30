@@ -8,32 +8,38 @@ class DummySender {
     TcpClient client;
 
     void start() {
-        final Messages.SnapshotRequest.Builder builder = Messages.SnapshotRequest.newBuilder();
+        final Messages.Update.Builder updateBuilder = Messages.Update.newBuilder();
+        final Messages.EntrySet.Builder entrySetBuilder = Messages.EntrySet.newBuilder();
+        final Messages.Entry.Builder entryBuilder = Messages.Entry.newBuilder();
         client.connect();
         try {
             final Sender sender = client.getSender("dummy")
             // small
             for (byte i = 0; i < 8; i++) {
-                builder.clear()
-                builder.setClientRevision(1)
-                builder.addPath(String.valueOf(i))
-                sender.send(builder.build().toByteArray())
+                updateBuilder.clear()
+                updateBuilder.setAuthor("Pavel")
+                updateBuilder.setComment("No Comments")
+                updateBuilder.addEntrySet(entrySetBuilder.setPath(String.valueOf(i)).build())
+                sender.send(updateBuilder.build().toByteArray())
             }
             //large one
-            builder.clear()
-            builder.setClientRevision(1)
+            updateBuilder.clear()
+            updateBuilder.setAuthor("Pavel")
+            updateBuilder.setComment("No Comments")
             for (int i = 0; i < 600; i++) {
-                builder.addPath(String.valueOf(i))
+                updateBuilder.addEntrySet(entrySetBuilder.setPath(String.valueOf(i)).build())
             }
-            sender.send(builder.build().toByteArray())
+            sender.send(updateBuilder.build().toByteArray())
             // small
             Thread.sleep(500)
             for (byte i = 8; i < 12; i++) {
-                builder.clear()
-                builder.setClientRevision(1)
-                builder.addPath(String.valueOf(i))
-                sender.send(builder.build().toByteArray())
+                updateBuilder.clear()
+                updateBuilder.setAuthor("Pavel")
+                updateBuilder.setComment("No Comments")
+                updateBuilder.addEntrySet(entrySetBuilder.setPath(String.valueOf(i)).build())
+                sender.send(updateBuilder.build().toByteArray())
             }
+            Thread.sleep(5000)
         } finally {
             client.close()
         }

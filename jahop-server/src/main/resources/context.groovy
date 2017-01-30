@@ -1,7 +1,7 @@
-import com.jahop.server.Server
+import com.jahop.server.ServerBootstrap
 
 beans {
-    server(Server) { bean ->
+    server(ServerBootstrap) { bean ->
         bean.initMethod = "start"
         bean.destroyMethod = "stop"
         port = 9090

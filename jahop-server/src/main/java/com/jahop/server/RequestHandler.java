@@ -1,8 +1,10 @@
 package com.jahop.server;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.TextFormat;
+import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageFactory;
 import com.jahop.common.msg.MessageType;
-import com.jahop.common.msg.Payload;
 import com.jahop.common.msg.proto.Messages;
 import com.lmax.disruptor.EventHandler;
 import org.apache.logging.log4j.LogManager;
@@ -17,22 +19,23 @@ public class RequestHandler implements EventHandler<Request> {
         this.messageFactory = messageFactory;
     }
 
-    public void onEvent(Request event, long sequence, boolean endOfBatch) {
-        log.info("Request: {}, sequence: {}, endOfBatch: {}", event, sequence, endOfBatch);
-        if (event.isSnapshotRequest()) {
-            handleSnapshot(event);
+    public void onEvent(final Request event, final long sequence, final boolean endOfBatch) {
+        final Message message = event.getMessage();
+        log.info("onEvent: sequence={}, message={}", sequence, message);
+        final byte type = message.getHeader().getType();
+        if (type == MessageType.PAYLOAD) {
+            try {
+                builder.mergeFrom(message.getPayload(), message.getPartOffset(), message.getPartLength());
+            } catch (InvalidProtocolBufferException e) {
+                log.error("Failed to parse payload", e);
+            }
+            handleUpdate();
         } else {
-            handleUpdate(event);
+            log.error("Unexpected message type: " + message);
         }
     }
 
-    private void handleUpdate(Request event) {
-        final Payload payload = messageFactory.createPayload(MessageType.UPDATE);
-        event.sendResponse(payload);
-    }
-
-    private void handleSnapshot(Request event) {
-        final Payload payload = messageFactory.createPayload(MessageType.SNAPSHOT);
-        event.sendResponse(payload);
+    private void handleUpdate() {
+        log.info("Update: {}", TextFormat.shortDebugString(builder));
     }
 }

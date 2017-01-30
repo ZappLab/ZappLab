@@ -19,6 +19,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="jahop-common_main" />
+    <orderEntry type="library" name="Gradle: com.lmax:disruptor:3.3.4" level="project" />
     <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:2.4.7" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.6.2" level="project" />
@@ -29,5 +30,6 @@
     <orderEntry type="library" name="Gradle: org.springframework:spring-aop:4.3.6.BUILD-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-beans:4.3.6.BUILD-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:4.3.6.BUILD-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:18.0" level="project" />
   </component>
 </module>
