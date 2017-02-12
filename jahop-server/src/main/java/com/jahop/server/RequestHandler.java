@@ -25,7 +25,7 @@ public class RequestHandler implements EventHandler<Request> {
         final byte type = message.getHeader().getType();
         if (type == MessageType.PAYLOAD) {
             try {
-                builder.mergeFrom(message.getPayload(), message.getPartOffset(), message.getPartLength());
+                builder.clear().mergeFrom(message.getPayload(), message.getPartOffset(), message.getPartLength());
             } catch (InvalidProtocolBufferException e) {
                 log.error("Failed to parse payload", e);
             }

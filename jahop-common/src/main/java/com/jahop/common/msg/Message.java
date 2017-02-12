@@ -186,20 +186,20 @@ public final class Message {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder()
-                .append("Message{").append("header=").append(header);
+                .append("Msg{").append("hdr=").append(header);
         switch (header.getType()) {
             case MessageType.HEARTBEAT:
-                sb.append(", revision=").append(revision);
+                sb.append(", rev=").append(revision);
                 break;
             case MessageType.ACK:
-                sb.append(", requestId=").append(requestId);
+                sb.append(", reqId=").append(requestId);
                 break;
             case MessageType.PAYLOAD:
-                sb.append(", revision=").append(revision);
-                sb.append(", requestId=").append(requestId);
-                sb.append(", payloadSize=").append(payloadSize);
+                sb.append(", rev=").append(revision);
+                sb.append(", reqId=").append(requestId);
+                sb.append(", loadSz=").append(payloadSize);
                 sb.append(", partNo=").append(partNo);
-                sb.append(", partsCount=").append(partsCount);
+                sb.append(", partsCnt=").append(partsCount);
                 break;
         }
         return sb.append('}').toString();

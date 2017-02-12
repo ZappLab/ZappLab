@@ -101,13 +101,13 @@ public final class MessageHeader {
 
     @Override
     public String toString() {
-        return "MessageHeader{" +
-                "version=" + version +
+        return "Hdr{" +
+                "ver=" + version +
                 ", type=" + MessageType.toString(type) +
-                ", bodySize=" + bodySize +
-                ", sourceId=" + sourceId +
+                ", bodySz=" + bodySize +
+                ", srcId=" + sourceId +
                 ", seqNo=" + seqNo +
-                ", timestampMs=" + timestampMs +
+                ", timeMs=" + timestampMs +
                 '}';
     }
 }

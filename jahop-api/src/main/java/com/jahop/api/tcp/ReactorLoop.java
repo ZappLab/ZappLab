@@ -1,4 +1,4 @@
-package com.jahop.api;
+package com.jahop.api.tcp;
 
 import com.jahop.common.msg.Message;
 import com.lmax.disruptor.RingBuffer;
@@ -23,6 +23,7 @@ public class ReactorLoop {
     private final RingBuffer<Message> ringBuffer;
     private final SocketAddress serverAddress;
     private final ArrayBlockingQueue<Message> pending;
+    private final ArrayList<Message> drained;
     private final ByteBuffer buffer;
     private final Thread thread;
     private SocketChannel socketChannel;
@@ -33,6 +34,7 @@ public class ReactorLoop {
         this.ringBuffer = ringBuffer;
         this.serverAddress = serverAddress;
         this.pending = new ArrayBlockingQueue<>(1024);
+        this.drained = new ArrayList<>(1024);
         this.buffer = ByteBuffer.allocate(Message.MAX_SIZE);
         this.thread = new Thread(this::run);
         this.thread.setName("reactor-thread");
@@ -64,9 +66,7 @@ public class ReactorLoop {
                         }
 
                         // Check what event is available and deal with it
-                        if (key.isConnectable()) {
-                            connect(key);
-                        } else if (key.isReadable()) {
+                        if (key.isReadable()) {
                             read(key);
                         } else if (key.isWritable()) {
                             write(key);
@@ -91,11 +91,6 @@ public class ReactorLoop {
         }
         socketChannel.close();
         log.info("Stopped: {}", this);
-    }
-
-    private void connect(final SelectionKey key) throws IOException {
-        socketChannel.register(selector, SelectionKey.OP_READ);
-        log.info("Connected");
     }
 
     private void read(final SelectionKey key) throws IOException {
@@ -126,23 +121,21 @@ public class ReactorLoop {
     }
 
     private void onData() {
-        while (buffer.hasRemaining()) {
-            final long sequence = ringBuffer.next();
-            try {
-                final Message message = ringBuffer.get(sequence);
-                message.read(buffer);
-            } finally {
-                ringBuffer.publish(sequence);
-            }
+        final long sequence = ringBuffer.next();
+        try {
+            final Message message = ringBuffer.get(sequence);
+            message.read(buffer);
+        } finally {
+            ringBuffer.publish(sequence);
         }
     }
 
     private void write(SelectionKey key) throws IOException {
-        final ArrayList<Message> messages = new ArrayList<>();
-        pending.drainTo(messages);
+        drained.clear();
+        pending.drainTo(drained);
 
         int count = 0;
-        for (Message message : messages) {
+        for (Message message : drained) {
             buffer.clear();
             if (message.write(buffer)) {
                 buffer.flip();

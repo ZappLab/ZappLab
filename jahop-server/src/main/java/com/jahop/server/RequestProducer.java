@@ -22,19 +22,16 @@ class RequestProducer {
     }
 
     void onData(Server server, SocketChannel socketChannel, final ByteBuffer buffer) throws IOException {
-//        while (buffer.hasRemaining())
-        {
-            final long sequence = ringBuffer.next();
-            try {
-                final Request request = ringBuffer.get(sequence);
-                request.setServer(server);
-                request.setSocketChannel(socketChannel);
-                final Message message = request.getMessage();
-                message.read(buffer);
-                server.send(socketChannel, messageFactory.createAck(message.getRequestId()));
-            } finally {
-                ringBuffer.publish(sequence);
-            }
+        final long sequence = ringBuffer.next();
+        try {
+            final Request request = ringBuffer.get(sequence);
+            request.setServer(server);
+            request.setSocketChannel(socketChannel);
+            final Message message = request.getMessage();
+            message.read(buffer);
+            server.send(socketChannel, messageFactory.createAck(message.getRequestId()));
+        } finally {
+            ringBuffer.publish(sequence);
         }
     }
 }

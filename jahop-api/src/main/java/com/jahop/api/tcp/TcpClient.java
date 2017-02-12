@@ -2,7 +2,6 @@ package com.jahop.api.tcp;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.jahop.api.Client;
-import com.jahop.api.ReactorLoop;
 import com.jahop.api.ResponseHandler;
 import com.jahop.api.Sender;
 import com.jahop.common.msg.Message;
@@ -22,11 +21,12 @@ import java.util.concurrent.ThreadFactory;
 public class TcpClient implements Client {
     private static final Logger log = LogManager.getLogger(TcpClient.class);
     private final ThreadFactory workerThreadFactory = new ThreadFactoryBuilder().setNameFormat("worker-thread-%d").build();
+    private final Sequencer requestIdSequencer = new Sequencer();
     private final String serverHost;
     private final int serverPort;
     private final int sourceId;
+    private final MessageFactory messageFactory;
     private int ringBufferSize = 1024;           // Specify the size of the request ring buffer, must be power of 2.
-    private MessageFactory messageFactory;
     private Disruptor<Message> disruptor;
     private ReactorLoop reactorLoop;
 
@@ -34,6 +34,7 @@ public class TcpClient implements Client {
         this.serverHost = serverHost;
         this.serverPort = serverPort;
         this.sourceId = sourceId;
+        this.messageFactory = new MessageFactory(sourceId, new Sequencer());
     }
 
     public void setRingBufferSize(int ringBufferSize) {
@@ -41,7 +42,6 @@ public class TcpClient implements Client {
     }
 
     public void connect() throws IOException {
-        messageFactory = new MessageFactory(sourceId, new Sequencer());
         disruptor = new Disruptor<>(MessageFactory::allocateMessage, ringBufferSize, workerThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
         disruptor.handleEventsWith(new ResponseHandler());
         // Start request processing threads
@@ -63,9 +63,9 @@ public class TcpClient implements Client {
     @Override
     public Sender getSender(String topic) {
         return data -> {
-            final Message payload = messageFactory.createPayload(0, 777, data);
+            final Message payload = messageFactory.createPayload(0, requestIdSequencer.next(), data);
             reactorLoop.send(payload);
-            log.info("Send: {}", payload);
+            log.info("Sent: {}", payload);
         };
     }
 }

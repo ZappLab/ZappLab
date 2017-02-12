@@ -24,7 +24,7 @@ public class Server {
     private final int port;
     private final ByteBuffer buffer;
     private final Selector selector;
-    private final ConnectionManager connectionManager;
+    private final Channels channels;
     private final Thread thread;
     private volatile boolean started;
 
@@ -33,7 +33,7 @@ public class Server {
         this.port = port;
         this.buffer = ByteBuffer.allocate(Message.MAX_SIZE);
         this.selector = initSelector();
-        this.connectionManager = new ConnectionManager();
+        this.channels = new Channels();
         this.thread = new Thread(this::run);
         this.thread.setName("server-thread");
     }
@@ -47,7 +47,7 @@ public class Server {
     public void run() {
         while (started) {
             try {
-                final Collection<SocketChannel> pendingChannels = connectionManager.pollPendingChannels();
+                final Collection<SocketChannel> pendingChannels = channels.drainPendingChannels();
                 for (SocketChannel channel : pendingChannels) {
                     final SelectionKey key = channel.keyFor(selector);
                     key.interestOps(SelectionKey.OP_WRITE);
@@ -100,7 +100,7 @@ public class Server {
         channel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
         channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
         channel.register(selector, SelectionKey.OP_READ);
-        connectionManager.addChannel(channel);
+        channels.registerChannel(channel);
         log.info("{}: connected", channel.getRemoteAddress());
     }
 
@@ -122,7 +122,7 @@ public class Server {
 
         if (count == -1) {
             log.info("{}: disconnected", remoteAddress);
-            connectionManager.removeChannel(channel);
+            channels.unregisterChannel(channel);
             key.cancel();
             channel.close();
             return;
@@ -139,7 +139,7 @@ public class Server {
         final SocketChannel channel = (SocketChannel) key.channel();
         final SocketAddress remoteAddress = channel.getRemoteAddress();
 
-        final Collection<Message> messages = connectionManager.pollChannelMessages(channel);
+        final Collection<Message> messages = channels.drainMessages(channel);
         int count = 0;
         for (Message message : messages) {
             buffer.clear();
@@ -173,7 +173,7 @@ public class Server {
     }
 
     public void send(final SocketChannel channel, final Message message) {
-        connectionManager.addChannelMessage(channel, message);
+        channels.putMessage(channel, message);
         selector.wakeup();
     }
 
