@@ -6,7 +6,6 @@ import com.lmax.disruptor.RingBuffer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -21,7 +20,7 @@ class RequestProducer {
         this.messageFactory = messageFactory;
     }
 
-    void onData(Server server, SocketChannel socketChannel, final ByteBuffer buffer) throws IOException {
+    void onData(Server server, SocketChannel socketChannel, final ByteBuffer buffer) {
         final long sequence = ringBuffer.next();
         try {
             final Request request = ringBuffer.get(sequence);
