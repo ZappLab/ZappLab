@@ -139,9 +139,8 @@ public class ReactorLoop {
             buffer.clear();
             if (message.write(buffer)) {
                 buffer.flip();
-                count += socketChannel.write(buffer);
-                if (buffer.remaining() > 0) {
-                    log.error("Socket buffer filled up");
+                while (buffer.hasRemaining()) {
+                    count += socketChannel.write(buffer);
                 }
             } else {
                 log.error("Internal buffer filled up");

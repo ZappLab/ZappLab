@@ -48,7 +48,7 @@ public class ServerBootstrap {
         // Start request processing threads
         disruptor.start();
 
-        final RequestProducer producer = new RequestProducer(disruptor.getRingBuffer(), messageFactory);
+        final RequestProducer producer = new RequestProducer(disruptor.getRingBuffer());
         server = new Server(producer, port);
 
         server.start();

@@ -101,18 +101,13 @@ public final class Message {
 
     public final boolean read(final ByteBuffer buffer) {
         clear();
-        if (buffer.remaining() < MessageHeader.SIZE) {
-            return false;
-        }
-        header.read(buffer);
+        return header.read(buffer) && readBody(buffer);
+    }
+
+    public boolean readBody(final ByteBuffer buffer) {
         if (buffer.remaining() < header.getBodySize()) {
             return false;
         }
-        readBody(buffer);
-        return true;
-    }
-
-    private void readBody(final ByteBuffer buffer) {
         switch (header.getType()) {
             case MessageType.HEARTBEAT:
                 revision = buffer.getLong();
@@ -131,6 +126,7 @@ public final class Message {
             default:
                 throw new RuntimeException("Bad header: " + header);
         }
+        return true;
     }
 
     private void readPart(final ByteBuffer buffer) {
@@ -143,15 +139,13 @@ public final class Message {
     }
 
     public final boolean write(final ByteBuffer buffer) {
-        if (buffer.capacity() - buffer.position() < MessageHeader.SIZE + header.getBodySize()) {
-            return false;
-        }
-        header.write(buffer);
-        writeBody(buffer);
-        return true;
+        return buffer.remaining() >= header.getMessageSize() && header.write(buffer) && writeBody(buffer);
     }
 
-    private void writeBody(final ByteBuffer buffer) {
+    public boolean writeBody(final ByteBuffer buffer) {
+        if (buffer.remaining() < header.getBodySize()) {
+            return false;
+        }
         switch (header.getType()) {
             case MessageType.HEARTBEAT:
                 buffer.putLong(revision);
@@ -170,6 +164,7 @@ public final class Message {
             default:
                 throw new RuntimeException("Bad header: " + header);
         }
+        return true;
     }
 
     public void clear() {

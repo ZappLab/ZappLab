@@ -5,7 +5,7 @@ import com.jahop.common.msg.Message;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 
-public class Channels {
+public class SocketChannels {
     private final HashMap<SocketChannel, ArrayList<Message>> messages = new HashMap<>();
     private final HashSet<SocketChannel> pendingChannels = new HashSet<>();
 
@@ -17,6 +17,7 @@ public class Channels {
 
     public ArrayList<Message> unregisterChannel(final SocketChannel channel) {
         synchronized (messages) {
+            pendingChannels.remove(channel);
             return messages.remove(channel);
         }
     }

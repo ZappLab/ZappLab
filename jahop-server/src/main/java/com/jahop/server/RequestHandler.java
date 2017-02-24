@@ -20,18 +20,22 @@ public class RequestHandler implements EventHandler<Request> {
     }
 
     public void onEvent(final Request event, final long sequence, final boolean endOfBatch) {
-        final Message message = event.getMessage();
-        log.info("onEvent: sequence={}, message={}", sequence, message);
-        final byte type = message.getHeader().getType();
-        if (type == MessageType.PAYLOAD) {
-            try {
-                builder.clear().mergeFrom(message.getPayload(), message.getPartOffset(), message.getPartLength());
-            } catch (InvalidProtocolBufferException e) {
-                log.error("Failed to parse payload", e);
+        if (event.isReady()) {
+            final Message message = event.getMessage();
+            log.info("onEvent: sequence={}, message={}", sequence, message);
+            final byte type = message.getHeader().getType();
+            if (type == MessageType.PAYLOAD) {
+                try {
+                    builder.clear().mergeFrom(message.getPayload(), message.getPartOffset(), message.getPartLength());
+                } catch (InvalidProtocolBufferException e) {
+                    log.error("Failed to parse payload", e);
+                }
+                handleUpdate();
+            } else {
+                log.error("Unexpected message type: " + message);
             }
-            handleUpdate();
         } else {
-            log.error("Unexpected message type: " + message);
+            log.error("Bad request");
         }
     }
 

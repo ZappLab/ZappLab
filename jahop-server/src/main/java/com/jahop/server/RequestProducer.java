@@ -1,7 +1,6 @@
 package com.jahop.server;
 
-import com.jahop.common.msg.Message;
-import com.jahop.common.msg.MessageFactory;
+import com.jahop.common.msg.MessageHeader;
 import com.lmax.disruptor.RingBuffer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,22 +12,18 @@ class RequestProducer {
     private static final Logger log = LogManager.getLogger(RequestProducer.class);
 
     private final RingBuffer<Request> ringBuffer;
-    private final MessageFactory messageFactory;
 
-    RequestProducer(final RingBuffer<Request> ringBuffer, MessageFactory messageFactory) {
+    RequestProducer(final RingBuffer<Request> ringBuffer) {
         this.ringBuffer = ringBuffer;
-        this.messageFactory = messageFactory;
     }
 
-    void onData(Server server, SocketChannel socketChannel, final ByteBuffer buffer) {
+    void onData(final Server server, final SocketChannel socketChannel, final MessageHeader header, final ByteBuffer buffer) {
         final long sequence = ringBuffer.next();
         try {
             final Request request = ringBuffer.get(sequence);
             request.setServer(server);
             request.setSocketChannel(socketChannel);
-            final Message message = request.getMessage();
-            message.read(buffer);
-            server.send(socketChannel, messageFactory.createAck(message.getRequestId()));
+            request.read(header, buffer);
         } finally {
             ringBuffer.publish(sequence);
         }

@@ -1,6 +1,7 @@
 package com.jahop.server;
 
 import com.jahop.common.msg.Message;
+import com.jahop.common.msg.MessageHeader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,31 +10,28 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Server {
     private static final Logger log = LogManager.getLogger(Server.class);
-
+    private final HashMap<SocketChannel, ByteBuffer> inBuffers = new HashMap<>(16);
+    private final ByteBuffer outBuffer = ByteBuffer.allocate(Message.MAX_SIZE);
+    private final SocketChannels socketChannels = new SocketChannels();
+    private final MessageHeader header = new MessageHeader();
     private final RequestProducer producer;
     private final int port;
-    private final ByteBuffer buffer;
     private final Selector selector;
-    private final Channels channels;
     private final Thread thread;
     private volatile boolean started;
 
     public Server(final RequestProducer producer, final int port) throws IOException {
         this.producer = producer;
         this.port = port;
-        this.buffer = ByteBuffer.allocate(Message.MAX_SIZE);
         this.selector = initSelector();
-        this.channels = new Channels();
         this.thread = new Thread(this::run);
         this.thread.setName("server-thread");
     }
@@ -47,7 +45,7 @@ public class Server {
     public void run() {
         while (started) {
             try {
-                final Collection<SocketChannel> pendingChannels = channels.drainPendingChannels();
+                final Collection<SocketChannel> pendingChannels = socketChannels.drainPendingChannels();
                 for (SocketChannel channel : pendingChannels) {
                     final SelectionKey key = channel.keyFor(selector);
                     key.interestOps(SelectionKey.OP_WRITE);
@@ -95,59 +93,65 @@ public class Server {
     private void accept(final SelectionKey key) throws IOException {
         final ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
 
-        final SocketChannel channel = serverChannel.accept();
-        channel.configureBlocking(false);
-        channel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
-        channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-        channel.register(selector, SelectionKey.OP_READ);
-        channels.registerChannel(channel);
-        log.info("{}: connected", channel.getRemoteAddress());
+        final SocketChannel socketChannel = serverChannel.accept();
+        socketChannel.configureBlocking(false);
+        socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
+        socketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+        socketChannel.register(selector, SelectionKey.OP_READ);
+        socketChannels.registerChannel(socketChannel);
+        log.info("{}: connected", socketChannel.getRemoteAddress());
     }
 
     private void read(final SelectionKey key) throws IOException {
-        final SocketChannel channel = (SocketChannel) key.channel();
-        final SocketAddress remoteAddress = channel.getRemoteAddress();
+        final SocketChannel socketChannel = (SocketChannel) key.channel();
+        final SocketAddress remoteAddress = socketChannel.getRemoteAddress();
+        final ByteBuffer buffer = inBuffers.computeIfAbsent(socketChannel, socketChannel1 -> ByteBuffer.allocate(Message.MAX_SIZE));
 
-        // Clear out our read buffer so it's ready for new data
-        buffer.clear();
-
-        // Attempt to read off the channel
-        int count;
         try {
-            count = channel.read(buffer);
+            final int count = socketChannel.read(buffer);
+            if (count == -1) {
+                throw new ClosedChannelException();
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("{}: received {} bytes", remoteAddress, count);
+            }
+
+            buffer.flip();
+            buffer.mark();
+            while (header.read(buffer)) {
+                if (buffer.remaining() < header.getBodySize()) {
+                    buffer.reset();
+                    break;
+                }
+                producer.onData(this, socketChannel, header, buffer);
+                buffer.mark();
+            }
+            buffer.compact();
         } catch (IOException e) {
-            count = -1;
-            log.error(remoteAddress + ": failed to read off the channel", e);
-        }
-
-        if (count == -1) {
-            log.info("{}: disconnected", remoteAddress);
-            channels.unregisterChannel(channel);
+            if (e.getMessage() != null) {
+                log.error("{}: disconnected, reason - '{}'", remoteAddress, e.getMessage());
+            } else {
+                log.info("{}: disconnected", remoteAddress);
+            }
+            socketChannels.unregisterChannel(socketChannel);
+            inBuffers.remove(socketChannel);
             key.cancel();
-            channel.close();
-            return;
+            socketChannel.close();
         }
-
-        buffer.flip();
-        if (log.isDebugEnabled()) {
-            log.debug("{}: received {} bytes", remoteAddress, count);
-        }
-        producer.onData(this, channel, buffer);
     }
 
     private void write(SelectionKey key) throws IOException {
-        final SocketChannel channel = (SocketChannel) key.channel();
-        final SocketAddress remoteAddress = channel.getRemoteAddress();
+        final SocketChannel socketChannel = (SocketChannel) key.channel();
+        final SocketAddress remoteAddress = socketChannel.getRemoteAddress();
+        final Collection<Message> messages = socketChannels.drainMessages(socketChannel);
 
-        final Collection<Message> messages = channels.drainMessages(channel);
         int count = 0;
         for (Message message : messages) {
-            buffer.clear();
-            if (message.write(buffer)) {
-                buffer.flip();
-                count += channel.write(buffer);
-                if (buffer.remaining() > 0) {
-                    log.error("{}: socket buffer filled up", remoteAddress);
+            outBuffer.clear();
+            if (message.write(outBuffer)) {
+                outBuffer.flip();
+                while (outBuffer.hasRemaining()) {
+                    count += socketChannel.write(outBuffer);
                 }
             } else {
                 log.error("{}: internal buffer filled up", remoteAddress);
@@ -173,7 +177,7 @@ public class Server {
     }
 
     public void send(final SocketChannel channel, final Message message) {
-        channels.putMessage(channel, message);
+        socketChannels.putMessage(channel, message);
         selector.wakeup();
     }
 

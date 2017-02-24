@@ -46,4 +46,6 @@ dependencies {
     compile("commons-lang:commons-lang:2.6")
     compile("com.google.guava:guava:18.0")
     compile("com.lmax:disruptor:3.3.4")
+    compile("io.netty:netty-all:4.1.8.Final")
+    testCompile("junit:junit:4.+")
 }

@@ -6,7 +6,11 @@ public class Sequencer {
     private final AtomicLong sequencer;
 
     public Sequencer() {
-        sequencer = new AtomicLong(System.currentTimeMillis());
+        this(System.currentTimeMillis());
+    }
+
+    public Sequencer(final long initialValue) {
+        sequencer = new AtomicLong(initialValue);
     }
 
     public long next() {

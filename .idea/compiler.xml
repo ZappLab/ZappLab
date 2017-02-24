@@ -20,8 +20,6 @@
       <module name="jahop-server_test" target="1.8" />
       <module name="jahop_main" target="1.8" />
       <module name="jahop_test" target="1.8" />
-      <module name="zapplab_main" target="1.8" />
-      <module name="zapplab_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

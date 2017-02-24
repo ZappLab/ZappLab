@@ -38,6 +38,10 @@ public final class MessageHeader {
         this.type = type;
     }
 
+    public int getMessageSize() {
+        return SIZE + bodySize;
+    }
+
     public int getBodySize() {
         return bodySize;
     }
@@ -70,6 +74,15 @@ public final class MessageHeader {
         this.timestampMs = timestampMs;
     }
 
+    public void copyFrom(final MessageHeader source) {
+        setVersion(source.getVersion());
+        setType(source.getType());
+        setBodySize(source.getBodySize());
+        setSourceId(source.getSourceId());
+        setSeqNo(source.getSeqNo());
+        setTimestampMs(source.getTimestampMs());
+    }
+
     public void clear() {
         setVersion((byte) 0);
         setType((byte) 0);
@@ -79,7 +92,10 @@ public final class MessageHeader {
         setTimestampMs(0);
     }
 
-    public final void read(final ByteBuffer buffer) {
+    public final boolean read(final ByteBuffer buffer) {
+        if (buffer.remaining() < SIZE) {
+            return false;
+        }
         setVersion(buffer.get());
         setType(buffer.get());
         setBodySize(read2LowerBytes(buffer));
@@ -87,9 +103,13 @@ public final class MessageHeader {
         setSeqNo(buffer.getLong());
         setTimestampMs(buffer.getLong());
         buffer.getLong();   //reserved
+        return true;
     }
 
-    public final void write(final ByteBuffer buffer) {
+    public final boolean write(final ByteBuffer buffer) {
+        if (buffer.remaining() < SIZE) {
+            return false;
+        }
         buffer.put(getVersion());
         buffer.put(getType());
         write2LowerBytes(buffer, getBodySize());
@@ -97,6 +117,7 @@ public final class MessageHeader {
         buffer.putLong(getSeqNo());
         buffer.putLong(getTimestampMs());
         buffer.putLong(0);  //reserved
+        return true;
     }
 
     @Override
