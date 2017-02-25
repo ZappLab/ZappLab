@@ -127,6 +127,9 @@ public class Server {
                 buffer.mark();
             }
             buffer.compact();
+            if (log.isDebugEnabled() && buffer.hasRemaining()) {
+                log.debug("{}: waiting for remaining data (received {} bytes)", remoteAddress, count);
+            }
         } catch (IOException e) {
             if (e.getMessage() != null) {
                 log.error("{}: disconnected, reason - '{}'", remoteAddress, e.getMessage());

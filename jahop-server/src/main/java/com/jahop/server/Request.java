@@ -29,6 +29,10 @@ public class Request {
         return message;
     }
 
+    public SocketChannel getSocketChannel() {
+        return socketChannel;
+    }
+
     public void sendResponse(Message response) {
         server.send(socketChannel, response);
     }

@@ -5,16 +5,22 @@ import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class ServerTest {
+    private static final Logger log = LogManager.getLogger(ServerTest.class);
+    private final Random random = new Random(System.currentTimeMillis());
     private final InetSocketAddress serverAddress = new InetSocketAddress(12321);
     private RequestEventHandler eventHandler;
     private Disruptor<Request> disruptor;
@@ -45,23 +51,43 @@ public class ServerTest {
 
     @Test
     public void test() throws Exception {
-        // init connections
-        final DummySender[] senders = new DummySender[100];
-        for (int i = 0; i < senders.length; i++) {
-            senders[i] = new DummySender(i, serverAddress);
-            senders[i].connect();
+        final int sendersCount = 100;
+        final int messagesCount = 5;
+
+        // init connections and messages
+        final ByteBuffer[][] messages = new ByteBuffer[sendersCount][messagesCount];
+        final DummySender[] senders = new DummySender[sendersCount];
+        for (int i = 0; i < sendersCount; i++) {
+            final DummySender sender = new DummySender(i, serverAddress);
+            sender.connect();
+            senders[i] = sender;
+            for (int j = 0; j < messagesCount; j++) {
+                final String text = String.format("Message_%d_%d", i, j);
+                messages[i][j] = sender.wrapPayload(text.getBytes());
+            }
         }
 
-        final CountDownLatch latch = new CountDownLatch(5 * senders.length);
+        final CountDownLatch latch = new CountDownLatch(messagesCount * sendersCount);
         eventHandler.setLatch(latch);
 
-        // send dummy data
-        for (DummySender sender : senders) {
-            sender.send(new byte[] {11,12,13});
-            sender.send(new byte[] {21,22,23});
-            sender.send(new byte[] {31,32,33});
-            sender.send(new byte[] {41,42,43});
-            sender.send(new byte[] {51,52,53});
+        // send messages concurrently
+        for (int j = 0; j < messagesCount; j++) {
+            // send 1st part
+            for (int i = 0; i < sendersCount; i++) {
+                final DummySender sender = senders[i];
+                final ByteBuffer message = messages[i][j];
+                final int fullSize = message.remaining();
+                final int partSize = random.nextInt(fullSize) + 1;
+                message.limit(partSize);
+                sender.send(message);
+                message.limit(fullSize);
+            }
+            // send 2nd part (the rest)
+            for (int i = 0; i < sendersCount; i++) {
+                final DummySender sender = senders[i];
+                final ByteBuffer message = messages[i][j];
+                sender.send(message);
+            }
         }
 
         // wait for all messages to hit server
@@ -85,6 +111,7 @@ public class ServerTest {
         public void onEvent(Request event, long sequence, boolean endOfBatch) throws Exception {
             if (event.isReady()) {
                 latch.countDown();
+                log.info("{}: received {}", event.getSocketChannel().getRemoteAddress(), event.getMessage());
             } else {
                 throw new RuntimeException();
             }
