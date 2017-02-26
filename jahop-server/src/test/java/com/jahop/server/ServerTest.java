@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.util.Locale;
+import java.nio.channels.Selector;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +34,6 @@ public class ServerTest {
 
     @Before
     public void setUp() throws Exception {
-        Locale.setDefault(Locale.US);
         totalTimeNs = System.nanoTime();
         final MessageFactory messageFactory = new MessageFactory(1, new Sequencer(0));
         eventHandler = new RequestEventHandler(messageFactory);
@@ -48,7 +47,7 @@ public class ServerTest {
         disruptor.handleEventsWith(eventHandler);
         disruptor.start();
 
-        server = new Server(new RequestProducer(disruptor.getRingBuffer()), serverAddress.getPort());
+        server = new Server(new RequestProducer(disruptor.getRingBuffer()), serverAddress);
         server.start();
         testTimeNs = System.nanoTime();
     }
@@ -67,10 +66,11 @@ public class ServerTest {
         final int messagesCount = 4;
 
         // init connections and messages
+        final Selector selector = Selector.open();
         final ByteBuffer[][] messages = new ByteBuffer[sendersCount][messagesCount];
-        final DummySender[] senders = new DummySender[sendersCount];
+        final DummyClient[] senders = new DummyClient[sendersCount];
         for (int i = 0; i < sendersCount; i++) {
-            final DummySender sender = new DummySender(i, serverAddress);
+            final DummyClient sender = new DummyClient(i, serverAddress, null);
             sender.connect();
             senders[i] = sender;
             for (int j = 0; j < messagesCount; j++) {
@@ -79,14 +79,15 @@ public class ServerTest {
             }
         }
 
-        final CountDownLatch latch = new CountDownLatch(messagesCount * sendersCount);
-        eventHandler.setLatch(latch);
+        final CountDownLatch requestLatch = new CountDownLatch(messagesCount * sendersCount);
+        final CountDownLatch responseLatch = new CountDownLatch(messagesCount * sendersCount);
+        eventHandler.setLatch(requestLatch);
 
         // send messages concurrently
         for (int j = 0; j < messagesCount; j++) {
             // send 1st part
             for (int i = 0; i < sendersCount; i++) {
-                final DummySender sender = senders[i];
+                final DummyClient sender = senders[i];
                 final ByteBuffer message = messages[i][j];
                 final int fullSize = message.remaining();
                 final int partSize = random.nextInt(fullSize) + 1;
@@ -96,17 +97,17 @@ public class ServerTest {
             }
             // send 2nd part (the rest)
             for (int i = 0; i < sendersCount; i++) {
-                final DummySender sender = senders[i];
+                final DummyClient sender = senders[i];
                 final ByteBuffer message = messages[i][j];
                 sender.send(message);
             }
         }
 
         // wait for all messages to hit server
-        Assert.assertTrue(latch.await(10, TimeUnit.SECONDS));
+        Assert.assertTrue(requestLatch.await(10, TimeUnit.SECONDS));
 
         // close all connections
-        for (DummySender sender : senders) {
+        for (DummyClient sender : senders) {
             sender.close();
         }
     }
@@ -129,7 +130,7 @@ public class ServerTest {
             if (event.isReady()) {
                 latch.countDown();
                 final Message message = event.getMessage();
-                final String text = new String(message.getPayload(), 0, message.getPayloadSize());
+                final String text = new String(message.getPartBytes(), 0, message.getPayloadSize());
                 log.info("{}: received '{}'", event.getSocketChannel().getRemoteAddress(), text);
 
                 final Message response = messageFactory.createPayload(0, message.getRequestId(), text.getBytes());

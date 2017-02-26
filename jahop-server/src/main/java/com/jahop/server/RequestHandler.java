@@ -27,7 +27,7 @@ public class RequestHandler implements EventHandler<Request> {
 
             try {
                 validate(message);
-                builder.clear().mergeFrom(message.getPayload(), message.getPartOffset(), message.getPartLength());
+                builder.clear().mergeFrom(message.getPartBytes(), message.getPartOffset(), message.getPartLength());
                 handleUpdate();
             } catch (ValidationException e) {
                 log.error("Validation error", e);

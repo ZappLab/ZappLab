@@ -33,7 +33,7 @@ public final class Message {
     private int partsCount;
     private int partOffset;
     private int partLength;
-    private byte[] payload;
+    private byte[] partBytes;
 
     public MessageHeader getHeader() {
         return header;
@@ -95,12 +95,12 @@ public final class Message {
         this.payloadSize = payloadSize;
     }
 
-    public byte[] getPayload() {
-        return payload;
+    public byte[] getPartBytes() {
+        return partBytes;
     }
 
-    public void setPayload(byte[] payload) {
-        this.payload = payload;
+    public void setPartBytes(byte[] partBytes) {
+        this.partBytes = partBytes;
     }
 
     public int getPartOffset() {
@@ -159,10 +159,10 @@ public final class Message {
     private void readPart(final ByteBuffer buffer) {
         partOffset = 0;
         partLength = header.getBodySize() - PAYLOAD_HEADER_SIZE;
-        if (payload == null || payload.length < partLength) {
+        if (partBytes == null || partBytes.length < partLength) {
             throw new IllegalStateException("Not enough space allocated to read " + partLength + " bytes");
         }
-        buffer.get(payload, partOffset, partLength);
+        buffer.get(partBytes, partOffset, partLength);
     }
 
     public final boolean write(final ByteBuffer buffer) {
@@ -193,7 +193,7 @@ public final class Message {
                 buffer.putInt(payloadSize);
                 write2LowerBytes(buffer, partNo);
                 write2LowerBytes(buffer, partsCount);
-                buffer.put(payload, partOffset, partLength);
+                buffer.put(partBytes, partOffset, partLength);
                 break;
             default:
                 throw new RuntimeException("Bad header: " + header);

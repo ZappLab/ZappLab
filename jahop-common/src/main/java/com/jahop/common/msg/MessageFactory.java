@@ -16,7 +16,7 @@ public final class MessageFactory {
 
     public static Message allocateMessage() {
         final Message message = new Message();
-        message.setPayload(new byte[Message.PAYLOAD_MAX_PART_SIZE]);
+        message.setPartBytes(new byte[Message.PAYLOAD_MAX_PART_SIZE]);
         return message;
     }
 
@@ -50,7 +50,7 @@ public final class MessageFactory {
         message.setRevision(revision);
         message.setRequestId(requestId);
         message.setPayloadSize(payload.length);
-        message.setPayload(payload);
+        message.setPartBytes(payload);
         message.setPartOffset(0);
         message.setPartLength(payload.length);
         message.setPartsCount(1);

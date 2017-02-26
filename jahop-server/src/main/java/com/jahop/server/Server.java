@@ -6,12 +6,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
-import java.nio.channels.spi.SelectorProvider;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,20 +21,29 @@ public class Server {
     private final SocketChannels socketChannels = new SocketChannels();
     private final MessageHeader header = new MessageHeader();
     private final RequestProducer producer;
-    private final int port;
-    private final Selector selector;
-    private final Thread thread;
+    private final SocketAddress serverAddress;
+
+    private Selector selector;
+    private ServerSocketChannel serverSocketChannel;
+    private Thread thread;
     private volatile boolean started;
 
-    public Server(final RequestProducer producer, final int port) throws IOException {
+    public Server(final RequestProducer producer, final SocketAddress serverAddress) {
         this.producer = producer;
-        this.port = port;
-        this.selector = initSelector();
-        this.thread = new Thread(this::run);
-        this.thread.setName("server-thread");
+        this.serverAddress = serverAddress;
     }
 
-    public void start() {
+    public void start() throws IOException {
+        selector = Selector.open();
+
+        serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.configureBlocking(false);
+        serverSocketChannel.socket().bind(serverAddress);
+        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+
+        thread = new Thread(this::run);
+        thread.setName("server-thread");
+
         started = true;
         thread.start();
         log.info("Started: {}", this);
@@ -87,6 +94,7 @@ public class Server {
             log.error("Server thread interrupted.", e);
             Thread.currentThread().interrupt();
         }
+        serverSocketChannel.close();
         log.info("Stopped: {}", this);
     }
 
@@ -118,14 +126,14 @@ public class Server {
 
             buffer.flip();
             buffer.mark();
-            while (header.read(buffer)) {
-                if (buffer.remaining() < header.getBodySize()) {
-                    buffer.reset();
+            while (buffer.hasRemaining()) {
+                if (!header.read(buffer) || header.getBodySize() > buffer.remaining()) {
                     break;
                 }
                 producer.onData(this, socketChannel, header, buffer);
                 buffer.mark();
             }
+            buffer.reset();
             buffer.compact();
             if (log.isDebugEnabled() && buffer.hasRemaining()) {
                 log.debug("{}: waiting for remaining data (received {} bytes)", remoteAddress, count);
@@ -167,18 +175,6 @@ public class Server {
         }
     }
 
-    private Selector initSelector() throws IOException {
-        final Selector socketSelector = SelectorProvider.provider().openSelector();
-
-        final ServerSocketChannel serverChannel = ServerSocketChannel.open();
-        serverChannel.configureBlocking(false);
-
-        final InetSocketAddress isa = new InetSocketAddress(port);
-        serverChannel.socket().bind(isa);
-        serverChannel.register(socketSelector, SelectionKey.OP_ACCEPT);
-        return socketSelector;
-    }
-
     public void send(final SocketChannel channel, final Message message) {
         socketChannels.putMessage(channel, message);
         selector.wakeup();
@@ -187,7 +183,7 @@ public class Server {
     @Override
     public String toString() {
         return "Server{" +
-                "port=" + port +
+                "address=" + serverAddress +
                 '}';
     }
 }
