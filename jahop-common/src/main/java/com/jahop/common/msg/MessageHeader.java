@@ -1,6 +1,7 @@
 package com.jahop.common.msg;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 import static com.jahop.common.util.ByteUtils.read2LowerBytes;
 import static com.jahop.common.util.ByteUtils.write2LowerBytes;
@@ -118,6 +119,24 @@ public final class MessageHeader {
         buffer.putLong(getTimestampMs());
         buffer.putLong(0);  //reserved
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MessageHeader that = (MessageHeader) o;
+        return version == that.version &&
+                type == that.type &&
+                bodySize == that.bodySize &&
+                sourceId == that.sourceId &&
+                seqNo == that.seqNo &&
+                timestampMs == that.timestampMs;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(version, type, bodySize, sourceId, seqNo, timestampMs);
     }
 
     @Override

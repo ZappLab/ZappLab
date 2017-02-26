@@ -2,9 +2,7 @@ package com.jahop.common.msg;
 
 import com.jahop.common.util.Sequencer;
 
-import static com.jahop.common.msg.MessageType.ACK;
-import static com.jahop.common.msg.MessageType.HEARTBEAT;
-import static com.jahop.common.msg.MessageType.PAYLOAD;
+import static com.jahop.common.msg.MessageType.*;
 
 public final class MessageFactory {
     private final byte VERSION = 1;
@@ -26,6 +24,16 @@ public final class MessageFactory {
         final Message message = new Message();
         populateHeader(message, ACK, 8);
         message.setRequestId(requestId);
+        return message;
+    }
+
+    public final Message createReject(final long revision, final long requestId, final int error, final String details) {
+        final Message message = new Message();
+        populateHeader(message, REJECT, Message.REJECT_HEADER_SIZE + details.length());
+        message.setRevision(revision);
+        message.setRequestId(requestId);
+        message.setError(error);
+        message.setDetails(details);
         return message;
     }
 

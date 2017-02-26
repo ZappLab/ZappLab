@@ -4,12 +4,14 @@ public final class MessageType {
     public static final byte UNKNOWN = 0;
     public static final byte HEARTBEAT = 1;
     public static final byte ACK = 2;
-    public static final byte PAYLOAD = 3;
+    public static final byte REJECT = 3;
+    public static final byte PAYLOAD = 4;
 
     public static final byte[] TYPES = new byte[]{
             UNKNOWN,
             HEARTBEAT,
             ACK,
+            REJECT,
             PAYLOAD
     };
 
@@ -17,6 +19,7 @@ public final class MessageType {
             "UNKNOWN",
             "HEARTBEAT",
             "ACK",
+            "REJECT",
             "PAYLOAD"
     };
 
