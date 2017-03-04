@@ -22,27 +22,34 @@ public class DummyClient {
     private final ByteBuffer buffer = ByteBuffer.allocate(Message.MAX_SIZE);
     private final int sourceId;
     private final SocketAddress serverAddress;
-    private final Selector selector;
     private final MessageFactory messageFactory;
     private SocketChannel socketChannel;
+    private SelectionKey selectionKey;
 
-    public DummyClient(final int sourceId, final SocketAddress serverAddress, final Selector selector) {
+    public DummyClient(final int sourceId, final SocketAddress serverAddress) {
         this.sourceId = sourceId;
         this.serverAddress = serverAddress;
-        this.selector = selector;
         this.messageFactory = new MessageFactory(sourceId, new Sequencer());
     }
 
+    public int getSourceId() {
+        return sourceId;
+    }
+
     public void connect() throws IOException {
+        connect(null);
+    }
+    public void connect(final Selector selector) throws IOException {
         socketChannel = SocketChannel.open(serverAddress);
         if (selector != null) {
             socketChannel.configureBlocking(false);
-            socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
+            selectionKey = socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
         }
         log.info("DummyClient#{}: connected to {}", sourceId, serverAddress);
     }
 
     public void close() throws IOException {
+        selectionKey.cancel();
         socketChannel.close();
         log.info("DummyClient#{}: closed", sourceId);
     }
@@ -56,8 +63,8 @@ public class DummyClient {
         return count;
     }
 
-    public int send(final ByteBuffer buffer) throws IOException {
-        final int count = socketChannel.write(buffer);
+    public long send(final ByteBuffer... buffer) throws IOException {
+        final long count = socketChannel.write(buffer);
         log.info("DummyClient#{}: sent {} bytes", sourceId, count);
         return count;
     }
@@ -79,7 +86,8 @@ public class DummyClient {
                 if (message.readBody(buffer)) {
                     consumer.accept(message);
                 } else {
-                    throw new IllegalStateException("Failed to parse message");
+                    close();
+                    throw new IllegalStateException("Failed to parse message. Closing connection.");
                 }
                 buffer.mark();
             }

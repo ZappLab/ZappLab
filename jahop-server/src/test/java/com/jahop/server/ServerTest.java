@@ -17,14 +17,16 @@ import org.junit.Test;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 public class ServerTest {
     private static final Logger log = LogManager.getLogger(ServerTest.class);
-    private final Random random = new Random(System.currentTimeMillis());
+    private static final long TIMEOUT_SECONDS = 10;
     private final InetSocketAddress serverAddress = new InetSocketAddress(12321);
     private RequestEventHandler eventHandler;
     private Disruptor<Request> disruptor;
@@ -62,49 +64,56 @@ public class ServerTest {
 
     @Test
     public void test() throws Exception {
+        final long timeoutNs = TimeUnit.SECONDS.toNanos(TIMEOUT_SECONDS);
         final int sendersCount = 50;
-        final int messagesCount = 4;
+        final int messagesCount = 100;
 
         // init connections and messages
         final Selector selector = Selector.open();
         final ByteBuffer[][] messages = new ByteBuffer[sendersCount][messagesCount];
         final DummyClient[] senders = new DummyClient[sendersCount];
         for (int i = 0; i < sendersCount; i++) {
-            final DummyClient sender = new DummyClient(i, serverAddress, null);
-            sender.connect();
+            final DummyClient sender = new DummyClient(i, serverAddress);
+            sender.connect(selector);
             senders[i] = sender;
             for (int j = 0; j < messagesCount; j++) {
-                final String text = String.format("Message_%d_%d", i, j);
+                final String text = String.format("sourceId: %d, messageId: %d", i, j);
                 messages[i][j] = sender.wrapPayload(text.getBytes());
             }
         }
 
-        final CountDownLatch requestLatch = new CountDownLatch(messagesCount * sendersCount);
-        final CountDownLatch responseLatch = new CountDownLatch(messagesCount * sendersCount);
-        eventHandler.setLatch(requestLatch);
+        final AtomicInteger requestsCount = new AtomicInteger(messagesCount * sendersCount);
+        final AtomicInteger responsesCount = new AtomicInteger(messagesCount * sendersCount);
+        eventHandler.setConsumer(message -> requestsCount.decrementAndGet());
 
         // send messages concurrently
-        for (int j = 0; j < messagesCount; j++) {
-            // send 1st part
-            for (int i = 0; i < sendersCount; i++) {
-                final DummyClient sender = senders[i];
-                final ByteBuffer message = messages[i][j];
-                final int fullSize = message.remaining();
-                final int partSize = random.nextInt(fullSize) + 1;
-                message.limit(partSize);
-                sender.send(message);
-                message.limit(fullSize);
-            }
-            // send 2nd part (the rest)
-            for (int i = 0; i < sendersCount; i++) {
-                final DummyClient sender = senders[i];
-                final ByteBuffer message = messages[i][j];
-                sender.send(message);
+        final long startNs = System.nanoTime();
+        while ((System.nanoTime() - startNs) < timeoutNs && (requestsCount.get() > 0 || responsesCount.get() > 0)) {
+            if (selector.select(100) > 0) {
+                final Iterator<SelectionKey> selectedKeys = selector.selectedKeys().iterator();
+                while (selectedKeys.hasNext()) {
+                    final SelectionKey key = selectedKeys.next();
+                    selectedKeys.remove();
+
+                    if (!key.isValid()) {
+                        continue;
+                    }
+
+                    final DummyClient client = (DummyClient) key.attachment();
+                    // Check what event is available and deal with it
+                    if (key.isReadable()) {
+                        client.receive(message -> responsesCount.decrementAndGet());
+                    } else if (key.isWritable()) {
+                        final int sourceId = client.getSourceId();
+                        final ByteBuffer[] clientMessages = messages[sourceId];
+                        client.send(clientMessages);
+                    }
+                }
             }
         }
 
-        // wait for all messages to hit server
-        Assert.assertTrue(requestLatch.await(10, TimeUnit.SECONDS));
+        Assert.assertEquals("Requests missing",0, requestsCount.get());
+        Assert.assertEquals("Responses missing", 0, responsesCount.get());
 
         // close all connections
         for (DummyClient sender : senders) {
@@ -115,23 +124,26 @@ public class ServerTest {
 
     static class RequestEventHandler implements EventHandler<Request> {
         private final MessageFactory messageFactory;
-        private volatile CountDownLatch latch;
+        private volatile Consumer<Message> consumer;
 
         public RequestEventHandler(MessageFactory messageFactory) {
             this.messageFactory = messageFactory;
         }
 
-        public void setLatch(CountDownLatch latch) {
-            this.latch = latch;
+        public void setConsumer(Consumer<Message> consumer) {
+            this.consumer = consumer;
         }
 
         @Override
         public void onEvent(Request event, long sequence, boolean endOfBatch) throws Exception {
             if (event.isReady()) {
-                latch.countDown();
                 final Message message = event.getMessage();
                 final String text = new String(message.getPartBytes(), 0, message.getPayloadSize());
                 log.info("{}: received '{}'", event.getSocketChannel().getRemoteAddress(), text);
+
+                if (consumer != null) {
+                    consumer.accept(message);
+                }
 
                 final Message response = messageFactory.createPayload(0, message.getRequestId(), text.getBytes());
                 event.sendResponse(response);
