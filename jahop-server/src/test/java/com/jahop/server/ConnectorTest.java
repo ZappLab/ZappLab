@@ -4,6 +4,10 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageFactory;
 import com.jahop.common.util.Sequencer;
+import com.jahop.server.impl.tcp.TcpConnector;
+import com.jahop.server.msg.Request;
+import com.jahop.server.msg.RequestFactory;
+import com.jahop.server.msg.RequestProducer;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -24,13 +28,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class ServerTest {
-    private static final Logger log = LogManager.getLogger(ServerTest.class);
+public class ConnectorTest {
+    private static final Logger log = LogManager.getLogger(ConnectorTest.class);
     private static final long TIMEOUT_SECONDS = 10;
     private final InetSocketAddress serverAddress = new InetSocketAddress(12321);
     private RequestEventHandler eventHandler;
     private Disruptor<Request> disruptor;
-    private Server server;
+    private Connector connector;
     private long totalTimeNs;
     private long testTimeNs;
 
@@ -49,15 +53,16 @@ public class ServerTest {
         disruptor.handleEventsWith(eventHandler);
         disruptor.start();
 
-        server = new Server(new RequestProducer(disruptor.getRingBuffer()), serverAddress);
-        server.start();
+        connector = new TcpConnector(serverAddress.getPort());
+        connector.setProducer(new RequestProducer(disruptor.getRingBuffer()));
+        connector.start();
         testTimeNs = System.nanoTime();
     }
 
     @After
     public void tearDown() throws Exception {
         log.info("## Test took: {} ms", TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - testTimeNs));
-        server.stop();
+        connector.stop();
         disruptor.shutdown();
         log.info("#### Total time: {} ms", TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - totalTimeNs));
     }
@@ -139,14 +144,14 @@ public class ServerTest {
             if (event.isReady()) {
                 final Message message = event.getMessage();
                 final String text = new String(message.getPartBytes(), 0, message.getPayloadSize());
-                log.info("{}: received '{}'", event.getSocketChannel().getRemoteAddress(), text);
+                log.info("{}: received '{}'", event.getSource(), text);
 
                 if (consumer != null) {
                     consumer.accept(message);
                 }
 
                 final Message response = messageFactory.createPayload(0, message.getRequestId(), text.getBytes());
-                event.sendResponse(response);
+                event.getSource().send(response);
             } else {
                 throw new RuntimeException("Broken message");
             }

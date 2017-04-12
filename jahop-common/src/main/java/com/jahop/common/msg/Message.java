@@ -250,7 +250,7 @@ public final class Message {
             case MessageType.REJECT:
                 sb.append(", rev=").append(revision);
                 sb.append(", reqId=").append(requestId);
-                sb.append(", err=").append(MessageError.toString(error)).append('#').append(details);
+                sb.append(", err=").append(error).append('#').append(details);
                 break;
             case MessageType.PAYLOAD:
                 sb.append(", rev=").append(revision);

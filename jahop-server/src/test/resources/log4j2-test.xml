@@ -4,8 +4,8 @@
         <Property name="log.path">../logs</Property>
     </Properties>
     <Appenders>
-        <RollingFile name="File" fileName="${log.path}/server-test.log"
-                     filePattern="${log.path}/server-test-%d{yyyy-MM-dd}.log">
+        <RollingFile name="File" fileName="${log.path}/connector-test.log"
+                     filePattern="${log.path}/connector-test-%d{yyyy-MM-dd}.log">
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
             </PatternLayout>

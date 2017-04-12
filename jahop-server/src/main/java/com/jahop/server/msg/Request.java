@@ -1,40 +1,31 @@
-package com.jahop.server;
+package com.jahop.server.msg;
 
 import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageHeader;
+import com.jahop.server.Source;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 
-public class Request {
+public final class Request {
     enum Status {OK, ERROR}
     private final Message message;
-    private Server server;
-    private SocketChannel socketChannel;
+    private Source source;
     private Status status;
 
     public Request(Message message) {
         this.message = message;
     }
 
-    public void setServer(Server server) {
-        this.server = server;
+    public Source getSource() {
+        return source;
     }
 
-    public void setSocketChannel(SocketChannel socketChannel) {
-        this.socketChannel = socketChannel;
+    public void setSource(Source source) {
+        this.source = source;
     }
 
     public Message getMessage() {
         return message;
-    }
-
-    public SocketChannel getSocketChannel() {
-        return socketChannel;
-    }
-
-    public void sendResponse(Message response) {
-        server.send(socketChannel, response);
     }
 
     public void read(final MessageHeader header, final ByteBuffer buffer) {

@@ -1,4 +1,4 @@
-package com.jahop.server;
+package com.jahop.server.msg;
 
 import com.jahop.common.msg.MessageFactory;
 import com.lmax.disruptor.EventFactory;
