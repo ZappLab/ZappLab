@@ -3,49 +3,60 @@ package com.jahop.server;
 import com.jahop.common.msg.Message;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class MessagesQueue {
-    private final HashMap<Source, ArrayList<Message>> messages = new HashMap<>();
-    private final HashSet<Source> sources = new HashSet<>();
+    private final Map<Source, Deque<Message>> messages = new HashMap<>();
+    private Set<Source> sources = new HashSet<>();
+    private Set<Source> drainSources = new HashSet<>();
 
     public void registerSource(final Source source) {
         synchronized (messages) {
-            messages.put(source, new ArrayList<>());
+            messages.put(source, new LinkedList<>());
         }
     }
 
-    public ArrayList<Message> unregisterSource(final Source source) {
+    public Deque<Message> unregisterSource(final Source source) {
         synchronized (messages) {
             sources.remove(source);
             return messages.remove(source);
         }
     }
 
-    public void pushMessage(final Source source, final Message message) {
+    public void addLast(final Source source, final Message message) {
         synchronized (messages) {
-            final ArrayList<Message> messages = this.messages.get(source);
+            final Deque<Message> messages = this.messages.get(source);
             if (messages == null) {
                 throw new RuntimeException("Unknown source: " + source);
             }
-            messages.add(message);
+            messages.addLast(message);
             sources.add(source);
         }
     }
 
-    public ArrayList<Message> drainMessages(final Source source) {
+    public Message pollMessage(final Source source) {
         synchronized (messages) {
-            return messages.put(source, new ArrayList<>());
+            final Deque<Message> messages = this.messages.get(source);
+            if (messages == null) {
+                throw new RuntimeException("Unknown source: " + source);
+            }
+            return messages.poll();
         }
     }
 
-    public Collection<Source> drainSources() {
+    public void drainSources(final Consumer<Source> consumer) {
         synchronized (messages) {
             if (sources.isEmpty()) {
-                return Collections.emptyList();
+                return;
             }
-            final ArrayList<Source> channels = new ArrayList<>(sources);
-            sources.clear();
-            return channels;
+            final Set<Source> swap = sources;
+            sources = drainSources;
+            drainSources = swap;
+        }
+        final Iterator<Source> it = drainSources.iterator();
+        while (it.hasNext()) {
+            consumer.accept(it.next());
+            it.remove();
         }
     }
 

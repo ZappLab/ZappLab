@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 public class TcpSource implements Source{
-    private final ByteBuffer inBuffer = ByteBuffer.allocate(Message.MAX_SIZE);
-    private final ByteBuffer outBuffer = ByteBuffer.allocate(Message.MAX_SIZE);
+    private final ByteBuffer inBuffer = (ByteBuffer) ByteBuffer.allocate(Message.MAX_SIZE).clear();  // ready to receive data
+    private final ByteBuffer outBuffer = (ByteBuffer) ByteBuffer.allocate(Message.MAX_SIZE).flip();  // ready to write data
 
     private final String name;
     private final Connector connector;

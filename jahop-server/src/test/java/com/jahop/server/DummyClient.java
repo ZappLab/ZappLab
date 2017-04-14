@@ -65,7 +65,9 @@ public class DummyClient {
 
     public long send(final ByteBuffer... buffer) throws IOException {
         final long count = socketChannel.write(buffer);
-        log.info("DummyClient#{}: sent {} bytes", sourceId, count);
+        if (count > 0) {
+            log.info("DummyClient#{}: sent {} bytes", sourceId, count);
+        }
         return count;
     }
 
