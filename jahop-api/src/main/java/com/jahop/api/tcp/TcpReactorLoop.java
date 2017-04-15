@@ -12,43 +12,80 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.spi.SelectorProvider;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ReactorLoop {
-    private static final Logger log = LogManager.getLogger(ReactorLoop.class);
+public class TcpReactorLoop {
+    private static final Logger log = LogManager.getLogger(TcpReactorLoop.class);
 
+    private final AtomicBoolean started = new AtomicBoolean();
     private final RingBuffer<Message> ringBuffer;
     private final SocketAddress serverAddress;
     private final ArrayBlockingQueue<Message> pending;
     private final ArrayList<Message> drained;
     private final ByteBuffer buffer;
-    private final Thread thread;
+    private Thread thread;
     private SocketChannel socketChannel;
     private Selector selector;
-    private volatile boolean started;
 
-    public ReactorLoop(final RingBuffer<Message> ringBuffer, final SocketAddress serverAddress) {
+    public TcpReactorLoop(final RingBuffer<Message> ringBuffer, final SocketAddress serverAddress) {
         this.ringBuffer = ringBuffer;
         this.serverAddress = serverAddress;
         this.pending = new ArrayBlockingQueue<>(1024);
         this.drained = new ArrayList<>(1024);
         this.buffer = ByteBuffer.allocate(Message.MAX_SIZE);
-        this.thread = new Thread(this::run);
-        this.thread.setName("reactor-thread");
     }
 
-    public void start() throws IOException {
-        initSelector();
-        started = true;
-        thread.start();
-        log.info("Started: {}", this);
+    void start() {
+        if (started.compareAndSet(false, true)) {
+            try {
+                selector = Selector.open();
+                socketChannel = SocketChannel.open(serverAddress);
+                socketChannel.configureBlocking(false);
+                socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
+                socketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+                socketChannel.register(selector, SelectionKey.OP_READ);
+
+                thread = new Thread(this::run);
+                thread.setName("tcp-client-thread");
+                thread.start();
+
+                log.info("{}: Started", this);
+            } catch (IOException e) {
+                stop();
+                throw new RuntimeException(this + ": Failed to start", e);
+            }
+        }
+    }
+
+    void stop() {
+        if (started.compareAndSet(true, false)) {
+            try {
+                if (selector != null) {
+                    selector.close();
+                }
+                if (thread != null) {
+                    thread.join(1000);
+                }
+            } catch (InterruptedException e) {
+                log.error(this + ": Thread interrupted", e);
+                Thread.currentThread().interrupt();
+            } catch (IOException e) {
+                log.error(this + ": Failed to stop gracefully", e);
+            } finally {
+                try {
+                    socketChannel.close();
+                } catch (IOException ignore) {
+                }
+                log.info("{}: Stopped", this);
+            }
+        }
     }
 
     public void run() {
-        while (started) {
+        while (started.get()) {
             try {
                 if (!pending.isEmpty()) {
                     final SelectionKey key = socketChannel.keyFor(selector);
@@ -78,19 +115,6 @@ public class ReactorLoop {
                 System.exit(1);
             }
         }
-    }
-
-    public void stop() throws IOException {
-        started = false;
-        selector.close();
-        try {
-            thread.join(1000);
-        } catch (InterruptedException e) {
-            log.error("Reactor thread interrupted.", e);
-            Thread.currentThread().interrupt();
-        }
-        socketChannel.close();
-        log.info("Stopped: {}", this);
     }
 
     private void read(final SelectionKey key) throws IOException {
@@ -153,16 +177,6 @@ public class ReactorLoop {
         }
     }
 
-    private void initSelector() throws IOException {
-        selector = SelectorProvider.provider().openSelector();
-
-        socketChannel = SocketChannel.open(serverAddress);
-        socketChannel.configureBlocking(false);
-        socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
-        socketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-        socketChannel.register(selector, SelectionKey.OP_READ);
-    }
-
     public void send(final Message message) {
         try {
             pending.put(message);
@@ -175,7 +189,7 @@ public class ReactorLoop {
 
     @Override
     public String toString() {
-        return "ReactorLoop{" +
+        return "TcpReactorLoop{" +
                 "serverAddress=" + serverAddress +
                 '}';
     }

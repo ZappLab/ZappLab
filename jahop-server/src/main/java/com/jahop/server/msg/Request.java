@@ -33,7 +33,7 @@ public final class Request {
         status = message.readBody(buffer) ? Status.OK : Status.ERROR;
     }
 
-    public boolean isReady() {
+    public boolean isValid() {
         return status == Status.OK;
     }
 }

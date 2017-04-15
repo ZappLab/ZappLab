@@ -20,37 +20,45 @@ public class RequestHandler implements EventHandler<Request> {
     }
 
     public void onEvent(final Request event, final long sequence, final boolean endOfBatch) {
-        if (event.isReady()) {
+        if (event.isValid()) {
             final Message message = event.getMessage();
-            log.info("onEvent: sequence={}, message={}", sequence, message);
+            if (log.isDebugEnabled()) {
+                log.debug("Incoming: " + message);
+            }
 
             try {
                 validate(message);
                 builder.clear().mergeFrom(message.getPartBytes(), message.getPartOffset(), message.getPartLength());
                 handleUpdate();
             } catch (ServerException e) {
-                log.error("Server error", e);
-                final Message reject = messageFactory.createReject(revision, message.getRequestId(), e.getError(), e.getMessage());
-                event.getSource().send(reject);
+                log.info("Message validation failed: " + e.getMessage());
+                sendReject(event, e.getError(), e.getMessage());
             } catch (InvalidProtocolBufferException e) {
-                log.error("Failed to parse payload", e);
-                final Message reject = messageFactory.createReject(revision, message.getRequestId(), Errors.REQUEST_BROKEN_MESSAGE, "Invalid payload format");
-                event.getSource().send(reject);
+                log.error("Invalid message format", e);
+                sendReject(event, Errors.MESSAGE_INVALID_FORMAT, "Invalid message format: " + e.getMessage());
+            } catch (Exception e) {
+                log.error("Event handler error", e);
+                sendReject(event, Errors.SYSTEM_EVENT_HANDLER, "Event handler error: " + e.getMessage());
             }
         } else {
-            log.error("Bad request");
+            log.error("Invalid request");
         }
     }
 
-    private void validate(final Message message) throws ServerException {
+    private void validate(final Message message) {
         final MessageHeader header = message.getHeader();
 
         if (header.getSourceId() < 1000) {
-            throw new ServerException(Errors.REQUEST_BAD_SOURCE_ID, "Bad source id ([0, 999] reserved): " + header.getSourceId());
+            throw new ServerException(Errors.MESSAGE_BAD_SOURCE_ID, "Bad source id ([0, 999] reserved): " + header.getSourceId());
         }
         if (header.getType() != MessageType.PAYLOAD) {
-            throw new ServerException(Errors.REQUEST_BAD_MESSAGE_TYPE, "Bad message type (PAYLOAD expected): " + MessageType.toString(header.getType()));
+            throw new ServerException(Errors.MESSAGE_BAD_TYPE, "Bad message type (PAYLOAD expected): " + MessageType.toString(header.getType()));
         }
+    }
+
+    private void sendReject(final Request event, int error, String message) {
+        final Message reject = messageFactory.createReject(revision, event.getMessage().getRequestId(), error, message);
+        event.getSource().send(reject);
     }
 
     private void handleUpdate() {

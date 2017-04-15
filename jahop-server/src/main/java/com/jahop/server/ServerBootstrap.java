@@ -18,18 +18,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
 
 @SpringBootApplication
 public class ServerBootstrap {
     private static final Logger log = LogManager.getLogger(ServerBootstrap.class);
+    private static final int SOURCE_ID = 1;
     private final ThreadFactory workerThreadFactory = new ThreadFactoryBuilder().setNameFormat("worker-thread-%d").build();
-    private final int sourceId = 1;
-    private final List<Connector> connectors = connectors();
 
     private Disruptor<Request> disruptor;
+    private List<Connector> connectors;
 
     public static void main(String[] args) {
         SpringApplication.run(ServerBootstrap.class, args);
@@ -37,7 +37,7 @@ public class ServerBootstrap {
 
     @PostConstruct
     public void start() throws IOException {
-        final MessageFactory messageFactory = new MessageFactory(sourceId, new Sequencer());
+        final MessageFactory messageFactory = new MessageFactory(SOURCE_ID, new Sequencer());
         // Construct request Disruptor and message handler
         disruptor = new Disruptor<>(new RequestFactory(), 1024, workerThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
         disruptor.handleEventsWith(new RequestHandler(messageFactory));
@@ -45,21 +45,21 @@ public class ServerBootstrap {
         disruptor.start();
 
         final RequestProducer producer = new RequestProducer(disruptor.getRingBuffer());
-        connectors.forEach(c -> {
-            c.setProducer(producer);
-            c.start();
-        });
+        connectors = connectors(producer);
+        connectors.forEach(Connector::start);
+        log.info("Server started");
     }
 
     @PreDestroy
     public void stop() throws IOException {
         connectors.forEach(Connector::stop);
         disruptor.shutdown();
+        log.info("Stopped started");
     }
 
-    private List<Connector> connectors() {
-        return Arrays.asList(
-                new TcpConnector(9090)
-        );
+    private List<Connector> connectors(final RequestProducer producer) {
+        final TcpConnector connector = new TcpConnector(9090);
+        connector.setProducer(producer);
+        return Collections.singletonList(connector);
     }
 }

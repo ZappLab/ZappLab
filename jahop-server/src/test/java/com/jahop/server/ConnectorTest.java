@@ -141,7 +141,7 @@ public class ConnectorTest {
 
         @Override
         public void onEvent(Request event, long sequence, boolean endOfBatch) throws Exception {
-            if (event.isReady()) {
+            if (event.isValid()) {
                 final Message message = event.getMessage();
                 final String text = new String(message.getPartBytes(), 0, message.getPayloadSize());
                 log.info("{}: received '{}'", event.getSource(), text);

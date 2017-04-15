@@ -72,14 +72,17 @@ public class TcpConnector implements Connector {
                 if (thread != null) {
                     thread.join(1000);
                 }
-            } catch (Exception e) {
-                throw new ServerException(SYSTEM_TCP_CONNECTOR, this + ": Failed to stop gracefully", e);
+            } catch (InterruptedException e) {
+                log.error(this + ": Thread interrupted", e);
+                Thread.currentThread().interrupt();
+            } catch (IOException e) {
+                log.error(this + ": Failed to stop gracefully", e);
             } finally {
                 try {
                     serverSocketChannel.close();
                 } catch (IOException ignore) {
                 }
-                log.info("{}: Stopped", this);
+                log.info(this + ": Stopped");
             }
         }
     }

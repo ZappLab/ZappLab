@@ -2,7 +2,6 @@ package com.jahop.api.tcp;
 
 import com.google.protobuf.TextFormat;
 import com.jahop.api.Client;
-import com.jahop.api.Sender;
 import com.jahop.common.msg.proto.Messages.Entry;
 import com.jahop.common.msg.proto.Messages.EntrySet;
 import com.jahop.common.msg.proto.Messages.Update;
@@ -40,13 +39,12 @@ public class TcpClientTest {
 
     @Test
     public void testSend() throws Exception {
-        final Sender sender = client.getSender("dummy");
         // small
         {
             for (byte i = 0; i < 8; i++) {
                 final Update update = createUpdate(String.valueOf(i));
                 log.info("Sending: {}", TextFormat.shortDebugString(update));
-                sender.send(update.toByteArray());
+                client.send(update);
             }
         }
         //large one
@@ -57,7 +55,7 @@ public class TcpClientTest {
             }
             final Update update = createUpdate(paths);
             log.info("Sending: {}", TextFormat.shortDebugString(update));
-            sender.send(update.toByteArray());
+            client.send(update);
         }
         Thread.sleep(500);
         // small
@@ -65,7 +63,7 @@ public class TcpClientTest {
             for (byte i = 8; i < 12; i++) {
                 final Update update = createUpdate(String.valueOf(i));
                 log.info("Sending: {}", TextFormat.shortDebugString(update));
-                sender.send(update.toByteArray());
+                client.send(update);
             }
         }
         Thread.sleep(500);

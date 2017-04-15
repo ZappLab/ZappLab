@@ -10,7 +10,7 @@ beans {
 
     client(clientFactory: "create") { bean ->
         bean.constructorArgs = [clientProperties]
-        bean.initMethod = "connect"
-        bean.destroyMethod = "close"
+        bean.initMethod = "start"
+        bean.destroyMethod = "stop"
     }
 }
