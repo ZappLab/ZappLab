@@ -75,7 +75,7 @@ public final class MessageHeader {
         this.timestampMs = timestampMs;
     }
 
-    public void copyFrom(final MessageHeader source) {
+    void copyFrom(final MessageHeader source) {
         setVersion(source.getVersion());
         setType(source.getType());
         setBodySize(source.getBodySize());
@@ -84,7 +84,7 @@ public final class MessageHeader {
         setTimestampMs(source.getTimestampMs());
     }
 
-    public void clear() {
+    void clear() {
         setVersion((byte) 0);
         setType((byte) 0);
         setBodySize(0);

@@ -1,17 +1,20 @@
 package com.jahop.api.tcp;
 
-import com.google.protobuf.TextFormat;
 import com.jahop.api.Client;
+import com.jahop.api.ClientFactory;
+import com.jahop.api.Environment;
+import com.jahop.api.Transport;
 import com.jahop.common.msg.proto.Messages.Entry;
 import com.jahop.common.msg.proto.Messages.EntrySet;
 import com.jahop.common.msg.proto.Messages.Update;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.support.GenericGroovyApplicationContext;
 
+import java.util.function.Function;
 
 public class TcpClientTest {
     private static final Logger log = LogManager.getLogger(TcpClientTest.class);
@@ -20,62 +23,61 @@ public class TcpClientTest {
     private final EntrySet.Builder entrySetBuilder = EntrySet.newBuilder();
     private final Entry.Builder entryBuilder = Entry.newBuilder();
 
-    private GenericGroovyApplicationContext context;
     private Client client;
 
     @Before
     public void setUp() throws Exception {
-        context = new GenericGroovyApplicationContext();
-        context.load("context.groovy");
-        context.refresh();
+        final ClientFactory factory = ClientFactory.newInstance(Transport.TCP, Environment.LOCAL);
+        Assert.assertTrue(factory instanceof TcpClientFactory);
+        client = factory.create(1001);
+        Assert.assertTrue(client instanceof TcpClient);
+        client.start();
 
-        client = context.getBean(TcpClient.class);
+        log.info("### TcpClientTest started");
     }
 
     @After
     public void tearDown() throws Exception {
-        context.close();
+        client.stop();
+        log.info("### TcpClientTest stopped");
     }
 
     @Test
     public void testSend() throws Exception {
-        // small
         {
+            // small
             for (byte i = 0; i < 8; i++) {
-                final Update update = createUpdate(String.valueOf(i));
-                log.info("Sending: {}", TextFormat.shortDebugString(update));
-                client.send(update);
+                createAndSend(path -> path + ".value", String.valueOf(i));
             }
         }
-        //large one
         {
+            //large one
             final String[] paths = new String[500];
             for (int i = 0; i < paths.length; i++) {
                 paths[i] = String.valueOf(i);
             }
-            final Update update = createUpdate(paths);
-            log.info("Sending: {}", TextFormat.shortDebugString(update));
-            client.send(update);
+            createAndSend(path -> path + ".value", paths);
         }
-        Thread.sleep(500);
-        // small
         {
+            // small
             for (byte i = 8; i < 12; i++) {
-                final Update update = createUpdate(String.valueOf(i));
-                log.info("Sending: {}", TextFormat.shortDebugString(update));
-                client.send(update);
+                createAndSend(path -> path + ".value", String.valueOf(i));
             }
         }
-        Thread.sleep(500);
+
+        Thread.sleep(5000);
     }
 
-    private Update createUpdate(final String... paths) {
-        updateBuilder.clear();
-        updateBuilder.setAuthor("Pavel");
-        updateBuilder.setComment("No Comments");
+    private void createAndSend(final Function<String, String> entryFunction, final String... paths) {
+        updateBuilder.clear().setAuthor("Pavel").setComment("Test update");
         for (String path : paths) {
-            updateBuilder.addEntrySet(entrySetBuilder.setPath(path).build());
+            entryBuilder.clear().setAction(Entry.Action.UPDATE)
+                    .setKey("param").setValue(entryFunction.apply(path));
+            entrySetBuilder.clear().setPath(path).addEntry(entryBuilder.build());
+            updateBuilder.addEntrySet(entrySetBuilder.build());
         }
-        return updateBuilder.build();
+        final Update update = updateBuilder.build();
+
+        client.send(update);
     }
 }

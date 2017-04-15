@@ -124,6 +124,12 @@ public final class Message {
         return header.read(buffer) && readBody(buffer);
     }
 
+    public final boolean read(final MessageHeader header, final ByteBuffer buffer) {
+        clear();
+        this.header.copyFrom(header);
+        return readBody(buffer);
+    }
+
     public boolean readBody(final ByteBuffer buffer) {
         if (buffer.remaining() < header.getBodySize()) {
             return false;

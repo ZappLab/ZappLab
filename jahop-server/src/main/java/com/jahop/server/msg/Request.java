@@ -29,8 +29,7 @@ public final class Request {
     }
 
     public void read(final MessageHeader header, final ByteBuffer buffer) {
-        message.getHeader().copyFrom(header);
-        status = message.readBody(buffer) ? Status.OK : Status.ERROR;
+        status = message.read(header, buffer) ? Status.OK : Status.ERROR;
     }
 
     public boolean isValid() {

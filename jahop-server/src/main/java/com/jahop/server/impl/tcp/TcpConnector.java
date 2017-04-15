@@ -53,10 +53,10 @@ public class TcpConnector implements Connector {
                 thread.setName("tcp-connector-thread");
                 thread.start();
 
-                log.info("{}: Started", this);
+                log.info(this + ": Started");
             } catch (IOException e) {
                 stop();
-                throw new ServerException(SYSTEM_TCP_CONNECTOR, this + ": Failed to start", e);
+                throw new ServerException(SYSTEM_TCP_CONNECTOR, this + ": " + e.getMessage(), e);
             }
         }
     }
@@ -73,13 +73,15 @@ public class TcpConnector implements Connector {
                     thread.join(1000);
                 }
             } catch (InterruptedException e) {
-                log.error(this + ": Thread interrupted", e);
+                log.error(this + ": Interrupted");
                 Thread.currentThread().interrupt();
             } catch (IOException e) {
-                log.error(this + ": Failed to stop gracefully", e);
+                log.error(this + ": " + e.getMessage(), e);
             } finally {
                 try {
-                    serverSocketChannel.close();
+                    if (serverSocketChannel != null) {
+                        serverSocketChannel.close();
+                    }
                 } catch (IOException ignore) {
                 }
                 log.info(this + ": Stopped");
@@ -194,6 +196,9 @@ public class TcpConnector implements Connector {
             if (buffer.hasRemaining()) {
                 count = socketChannel.write(buffer);
             }
+            if (log.isDebugEnabled()) {
+                log.debug("{}: sent {} bytes", source, count);
+            }
 
             if (!buffer.hasRemaining()) {
                 final Message message = messagesQueue.pollMessage(source);
@@ -208,10 +213,6 @@ public class TcpConnector implements Connector {
             }
 
             key.interestOps(buffer.hasRemaining() ? SelectionKey.OP_WRITE : SelectionKey.OP_READ);
-
-            if (log.isDebugEnabled()) {
-                log.debug("{}: sent {} bytes", source, count);
-            }
         } catch (IOException e) {
             disconnect(source, key, e);
         }
