@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -31,7 +32,6 @@ public class TcpReactorLoop {
     private Thread thread;
     private SocketChannel socketChannel;
     private Selector selector;
-    private SelectionKey selectionKey;
 
     public TcpReactorLoop(final RingBuffer<Message> ringBuffer, final SocketAddress serverAddress) {
         this.ringBuffer = ringBuffer;
@@ -46,7 +46,7 @@ public class TcpReactorLoop {
                 socketChannel.configureBlocking(false);
                 socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
                 socketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-                selectionKey = socketChannel.register(selector, SelectionKey.OP_READ);
+                socketChannel.register(selector, SelectionKey.OP_READ);
 
                 thread = new Thread(this::run);
                 thread.setName("tcp-client-thread");
@@ -90,15 +90,26 @@ public class TcpReactorLoop {
         while (started.get()) {
             try {
                 if (!pending.isEmpty()) {
-                    selectionKey.interestOps(SelectionKey.OP_WRITE);
+                    final SelectionKey key = socketChannel.keyFor(selector);
+                    if (key != null) {
+                        key.interestOps(SelectionKey.OP_WRITE);
+                    }
                 }
+                if (selector.select() > 0 && selector.isOpen()) {
+                    final Iterator<SelectionKey> selectedKeys = selector.selectedKeys().iterator();
+                    while (selectedKeys.hasNext()) {
+                        final SelectionKey key = selectedKeys.next();
+                        selectedKeys.remove();
 
-                if (selector.select() > 0 && selector.isOpen() && selectionKey.isValid()) {
-                    // Check what event is available and deal with it
-                    if (selectionKey.isReadable()) {
-                        read();
-                    } else if (selectionKey.isWritable()) {
-                        write();
+                        if (!key.isValid()) {
+                            continue;
+                        }
+                        // Check what event is available and deal with it
+                        if (key.isReadable()) {
+                            read();
+                        } else if (key.isWritable()) {
+                            write(key);
+                        }
                     }
                 }
             } catch (IOException e) {
@@ -146,7 +157,7 @@ public class TcpReactorLoop {
         }
     }
 
-    private void write() {
+    private void write(SelectionKey key) {
         int count = 0;
         if (sndBuffer.hasRemaining()) {
             try {
@@ -161,15 +172,17 @@ public class TcpReactorLoop {
 
         if (!sndBuffer.hasRemaining()) {
             final Message message = pending.poll();
-            sndBuffer.clear();
-            if (!message.write(sndBuffer)) {
+            if (message != null) {
                 sndBuffer.clear();
-                log.error("Send buffer overflow. Skipping {}", message);
+                if (!message.write(sndBuffer)) {
+                    sndBuffer.clear();
+                    log.error("Send buffer overflow. Skipping {}", message);
+                }
+                sndBuffer.flip();
             }
-            sndBuffer.flip();
         }
 
-        selectionKey.interestOps(sndBuffer.hasRemaining() ? SelectionKey.OP_WRITE : SelectionKey.OP_READ);
+        key.interestOps(sndBuffer.hasRemaining() ? SelectionKey.OP_WRITE : SelectionKey.OP_READ);
     }
 
     public void send(final Message message) {

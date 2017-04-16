@@ -1,6 +1,7 @@
-package com.jahop.server;
+package com.jahop.server.connectors.tcp;
 
 import com.jahop.common.msg.Message;
+import com.jahop.server.Source;
 
 import java.util.*;
 import java.util.function.Consumer;

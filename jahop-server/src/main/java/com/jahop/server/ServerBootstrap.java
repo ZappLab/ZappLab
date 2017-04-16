@@ -3,11 +3,13 @@ package com.jahop.server;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.jahop.common.msg.MessageFactory;
 import com.jahop.common.util.Sequencer;
-import com.jahop.server.impl.tcp.TcpConnector;
+import com.jahop.server.connectors.tcp.TcpConnector;
+import com.jahop.server.handlers.EchoRequestHandler;
 import com.jahop.server.msg.Request;
 import com.jahop.server.msg.RequestFactory;
 import com.jahop.server.msg.RequestProducer;
 import com.lmax.disruptor.BlockingWaitStrategy;
+import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import org.apache.logging.log4j.LogManager;
@@ -37,13 +39,17 @@ public class ServerBootstrap {
 
     @PostConstruct
     public void start() throws IOException {
+        // Create event handlers
         final MessageFactory messageFactory = new MessageFactory(SOURCE_ID, new Sequencer());
-        // Construct request Disruptor and message handler
+        final List<EventHandler<Request>> handlers = handlers(messageFactory);
+
+        // Create and start event dispatcher
         disruptor = new Disruptor<>(new RequestFactory(), 1024, workerThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
-        disruptor.handleEventsWith(new RequestHandler(messageFactory));
-        // Start request processing threads
+        //noinspection unchecked
+        handlers.forEach(disruptor::handleEventsWith);
         disruptor.start();
 
+        //Create and start connectors
         final RequestProducer producer = new RequestProducer(disruptor.getRingBuffer());
         connectors = connectors(producer);
         connectors.forEach(Connector::start);
@@ -61,5 +67,10 @@ public class ServerBootstrap {
         final TcpConnector connector = new TcpConnector(9090);
         connector.setProducer(producer);
         return Collections.singletonList(connector);
+    }
+
+    private List<EventHandler<Request>> handlers(final MessageFactory messageFactory) {
+        final EchoRequestHandler handler = new EchoRequestHandler(messageFactory);
+        return Collections.singletonList(handler);
     }
 }

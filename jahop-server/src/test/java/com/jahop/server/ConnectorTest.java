@@ -4,7 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageFactory;
 import com.jahop.common.util.Sequencer;
-import com.jahop.server.impl.tcp.TcpConnector;
+import com.jahop.server.connectors.tcp.TcpConnector;
 import com.jahop.server.msg.Request;
 import com.jahop.server.msg.RequestFactory;
 import com.jahop.server.msg.RequestProducer;

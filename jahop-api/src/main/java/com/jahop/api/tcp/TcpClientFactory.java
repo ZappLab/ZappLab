@@ -17,7 +17,7 @@ public class TcpClientFactory implements ClientFactory {
     @Override
     public void init(Properties properties) {
         final String addressString = Resources.getOrThrow(properties, PARAM_SERVER_ADDRESS);
-        final URI address = URI.create(addressString);
+        final URI address = URI.create("tcp://" + addressString);
         serverAddress = new InetSocketAddress(address.getHost(), address.getPort());
     }
 

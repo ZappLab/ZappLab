@@ -1,4 +1,4 @@
-package com.jahop.server.impl.tcp;
+package com.jahop.server.connectors.tcp;
 
 import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageHeader;
@@ -204,7 +204,11 @@ public class TcpConnector implements Connector {
                 final Message message = messagesQueue.pollMessage(source);
                 if (message != null) {
                     buffer.clear();
-                    if (!message.write(buffer)) {
+                    if (message.write(buffer)) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("{}: sent {}", source, message);
+                        }
+                    } else {
                         buffer.clear();
                         log.error("{}: out buffer overflow. Skipping {}", source, message);
                     }
