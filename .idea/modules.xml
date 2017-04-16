@@ -9,6 +9,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common.iml" group="jahop-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_main.iml" group="jahop-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-common/jahop-common_test.iml" group="jahop-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-console/jahop-console.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-console/jahop-console.iml" group="jahop-console" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-console/jahop-console_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-console/jahop-console_main.iml" group="jahop-console" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-console/jahop-console_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-console/jahop-console_test.iml" group="jahop-console" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server.iml" group="jahop-server" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_main.iml" group="jahop-server" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jahop-server/jahop-server_test.iml" group="jahop-server" />

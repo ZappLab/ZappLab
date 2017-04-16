@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+version '0.1'
+sourceCompatibility = 1.8
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'JaHOP Console',
+                'Implementation-Version': version,
+                'Main-Class': 'com.jahop.console.Console'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+repositories {
+    flatDir {
+        name "localRepository"
+        dirs "../local-repository"
+    }
+    mavenCentral()
+}
+
+uploadArchives {
+    repositories {
+        add project.repositories.localRepository
+    }
+}
+
+dependencies {
+    testCompile("junit:junit:4.+")
+    compile project(":jahop-api")
+    compile("org.jline:jline:3.2.0")
+}

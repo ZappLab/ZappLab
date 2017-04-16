@@ -9,7 +9,6 @@ repositories {
         dirs "../local-repository"
     }
     mavenCentral()
-    maven { url "http://repo.spring.io/libs-snapshot" }
 }
 
 uploadArchives {

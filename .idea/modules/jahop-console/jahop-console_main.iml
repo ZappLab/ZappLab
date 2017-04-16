@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":jahop-api:main" external.linked.project.path="$MODULE_DIR$/../../../jahop-api" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="jahop" external.system.module.type="sourceSet" external.system.module.version="1.0" type="JAVA_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/../../../jahop-api/src/main/resources/context.groovy</file>
-        </fileset>
-      </configuration>
-    </facet>
-  </component>
+<module external.linked.project.id=":jahop-console:main" external.linked.project.path="$MODULE_DIR$/../../../jahop-console" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="jahop" external.system.module.type="sourceSet" external.system.module.version="0.1" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/../../../jahop-api/build/classes/main" />
+    <output url="file://$MODULE_DIR$/../../../jahop-console/build/classes/main" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../jahop-api/src/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../../jahop-api/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../jahop-api/src/main/resources" type="java-resource" />
+    <content url="file://$MODULE_DIR$/../../../jahop-console/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../jahop-console/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../jahop-console/src/main/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="jahop-api_main" />
+    <orderEntry type="library" name="Gradle: org.jline:jline:3.2.0" level="project" />
     <orderEntry type="module" module-name="jahop-common_main" />
     <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:18.0" level="project" />

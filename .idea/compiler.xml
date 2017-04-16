@@ -16,6 +16,8 @@
       <module name="jahop-api_test" target="1.8" />
       <module name="jahop-common_main" target="1.8" />
       <module name="jahop-common_test" target="1.8" />
+      <module name="jahop-console_main" target="1.8" />
+      <module name="jahop-console_test" target="1.8" />
       <module name="jahop-server_main" target="1.8" />
       <module name="jahop-server_test" target="1.8" />
       <module name="jahop_main" target="1.8" />
