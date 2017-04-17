@@ -59,7 +59,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("commons-io:commons-io:2.4")
     compile("commons-lang:commons-lang:2.6")
-    compile("com.google.guava:guava:18.0")
+    compile("com.google.guava:guava:21.0")
     compile("com.lmax:disruptor:3.3.4")
     compile("io.netty:netty-all:4.1.8.Final")
     testCompile("junit:junit")

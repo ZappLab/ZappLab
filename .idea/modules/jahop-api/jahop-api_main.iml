@@ -20,7 +20,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="jahop-common_main" />
     <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.6" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:guava:18.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" name="Gradle: com.lmax:disruptor:3.3.4" level="project" />
     <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:2.4.7" level="project" />

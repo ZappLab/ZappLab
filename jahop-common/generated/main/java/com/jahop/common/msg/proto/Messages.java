@@ -1888,15 +1888,15 @@ public final class Messages {
         getKeyBytes();
 
     /**
-     * <code>required string value = 2;</code>
+     * <code>optional string value = 2;</code>
      */
     boolean hasValue();
     /**
-     * <code>required string value = 2;</code>
+     * <code>optional string value = 2;</code>
      */
     java.lang.String getValue();
     /**
-     * <code>required string value = 2;</code>
+     * <code>optional string value = 2;</code>
      */
     com.google.protobuf.ByteString
         getValueBytes();
@@ -2152,13 +2152,13 @@ public final class Messages {
     public static final int VALUE_FIELD_NUMBER = 2;
     private java.lang.Object value_;
     /**
-     * <code>required string value = 2;</code>
+     * <code>optional string value = 2;</code>
      */
     public boolean hasValue() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string value = 2;</code>
+     * <code>optional string value = 2;</code>
      */
     public java.lang.String getValue() {
       java.lang.Object ref = value_;
@@ -2175,7 +2175,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>required string value = 2;</code>
+     * <code>optional string value = 2;</code>
      */
     public com.google.protobuf.ByteString
         getValueBytes() {
@@ -2218,10 +2218,6 @@ public final class Messages {
       if (isInitialized == 0) return false;
 
       if (!hasKey()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasValue()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -2463,10 +2459,6 @@ public final class Messages {
           
           return false;
         }
-        if (!hasValue()) {
-          
-          return false;
-        }
         return true;
       }
 
@@ -2567,13 +2559,13 @@ public final class Messages {
 
       private java.lang.Object value_ = "";
       /**
-       * <code>required string value = 2;</code>
+       * <code>optional string value = 2;</code>
        */
       public boolean hasValue() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>optional string value = 2;</code>
        */
       public java.lang.String getValue() {
         java.lang.Object ref = value_;
@@ -2590,7 +2582,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>optional string value = 2;</code>
        */
       public com.google.protobuf.ByteString
           getValueBytes() {
@@ -2606,7 +2598,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>optional string value = 2;</code>
        */
       public Builder setValue(
           java.lang.String value) {
@@ -2619,7 +2611,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>optional string value = 2;</code>
        */
       public Builder clearValue() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -2628,7 +2620,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>optional string value = 2;</code>
        */
       public Builder setValueBytes(
           com.google.protobuf.ByteString value) {
@@ -2716,7 +2708,7 @@ public final class Messages {
       "ntrySet\022\016\n\006author\030\002 \001(\t\022\017\n\007comment\030\003 \001(\t" +
       "\">\n\010EntrySet\022\014\n\004path\030\001 \002(\t\022$\n\005entry\030\002 \003(" +
       "\0132\025.jahop.messages.Entry\"{\n\005Entry\022\013\n\003key" +
-      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\0224\n\006action\030\003 \001(\0162\034." +
+      "\030\001 \002(\t\022\r\n\005value\030\002 \001(\t\0224\n\006action\030\003 \001(\0162\034." +
       "jahop.messages.Entry.Action:\006UPDATE\" \n\006A" +
       "ction\022\n\n\006UPDATE\020\000\022\n\n\006DELETE\020\001B\034\n\032com.jah" +
       "op.common.msg.proto"

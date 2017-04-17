@@ -34,4 +34,5 @@ dependencies {
     testCompile("junit:junit:4.+")
     compile project(":jahop-api")
     compile("org.jline:jline:3.2.0")
+    compile("com.google.guava:guava:21.0")
 }
