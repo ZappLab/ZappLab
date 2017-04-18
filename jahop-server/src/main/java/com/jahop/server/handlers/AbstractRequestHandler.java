@@ -5,7 +5,8 @@ import com.jahop.common.msg.*;
 import com.jahop.common.msg.proto.Messages;
 import com.jahop.server.Errors;
 import com.jahop.server.ServerException;
-import com.jahop.server.Source;
+import com.jahop.server.connectors.Source;
+import com.jahop.server.connectors.Connectors;
 import com.jahop.server.msg.Request;
 import com.lmax.disruptor.EventHandler;
 import org.apache.logging.log4j.LogManager;
@@ -14,15 +15,17 @@ import org.apache.logging.log4j.Logger;
 public abstract class AbstractRequestHandler implements EventHandler<Request> {
     private static final Messages.Update.Builder builder = Messages.Update.newBuilder();
     protected final Logger log = LogManager.getLogger(AbstractRequestHandler.class);
+    protected final Connectors connectors;
     protected final MessageFactory messageFactory;
 
-    public AbstractRequestHandler(MessageFactory messageFactory) {
+    public AbstractRequestHandler(Connectors connectors, MessageFactory messageFactory) {
+        this.connectors = connectors;
         this.messageFactory = messageFactory;
     }
 
     public final void onEvent(final Request event, final long sequence, final boolean endOfBatch) {
+        final Message message = event.getMessage();
         if (event.isValid()) {
-            final Message message = event.getMessage();
             if (log.isDebugEnabled()) {
                 log.debug("Incoming: " + message);
             }
@@ -44,7 +47,7 @@ public abstract class AbstractRequestHandler implements EventHandler<Request> {
                 handleReject(source, requestId, Errors.SYSTEM_EVENT_HANDLER, "Event handler error: " + e.getMessage());
             }
         } else {
-            log.error("Invalid request");
+            log.error("Invalid request message: " + message.getHeader());
         }
     }
 

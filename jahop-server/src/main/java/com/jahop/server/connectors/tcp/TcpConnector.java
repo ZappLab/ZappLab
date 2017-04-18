@@ -3,6 +3,8 @@ package com.jahop.server.connectors.tcp;
 import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageHeader;
 import com.jahop.server.*;
+import com.jahop.server.connectors.Connector;
+import com.jahop.server.connectors.Source;
 import com.jahop.server.msg.RequestProducer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,18 +26,18 @@ public class TcpConnector implements Connector {
     private final MessagesQueue messagesQueue = new MessagesQueue();
     private final MessageHeader header = new MessageHeader();
     private final SocketAddress serverAddress;
+    private final RequestProducer producer;
 
-    private RequestProducer producer;
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
     private Thread thread;
 
-    public TcpConnector(final int port) {
-        this.serverAddress = new InetSocketAddress(port);
+    public TcpConnector(final int port, final RequestProducer producer) {
+        this(new InetSocketAddress(port), producer);
     }
 
-    @Override
-    public void setProducer(RequestProducer producer) {
+    public TcpConnector(final SocketAddress serverAddress, final RequestProducer producer) {
+        this.serverAddress = serverAddress;
         this.producer = producer;
     }
 
@@ -91,10 +93,15 @@ public class TcpConnector implements Connector {
 
     @Override
     public void send(final Source source, final Message message) {
-        if (!started.get()) {
-            throw new ServerException(SYSTEM_TCP_CONNECTOR, this + ": Not started");
-        }
-        messagesQueue.addLast(source, message);
+        checkStarted();
+        messagesQueue.addToSource(source, message);
+        selector.wakeup();
+    }
+
+    @Override
+    public void send(Message message) {
+        checkStarted();
+        messagesQueue.addToAll(message);
         selector.wakeup();
     }
 
@@ -232,6 +239,12 @@ public class TcpConnector implements Connector {
             log.error("{}: disconnected, reason - '{}'", source, e.getMessage());
         } else {
             log.info("{}: disconnected", source);
+        }
+    }
+
+    private void checkStarted() {
+        if (!started.get()) {
+            throw new ServerException(SYSTEM_TCP_CONNECTOR, this + ": Not started");
         }
     }
 

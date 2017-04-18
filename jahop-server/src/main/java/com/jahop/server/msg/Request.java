@@ -1,16 +1,12 @@
 package com.jahop.server.msg;
 
 import com.jahop.common.msg.Message;
-import com.jahop.common.msg.MessageHeader;
-import com.jahop.server.Source;
-
-import java.nio.ByteBuffer;
+import com.jahop.server.connectors.Source;
 
 public final class Request {
-    enum Status {OK, ERROR}
     private final Message message;
     private Source source;
-    private Status status;
+    private boolean valid;
 
     public Request(Message message) {
         this.message = message;
@@ -24,15 +20,15 @@ public final class Request {
         this.source = source;
     }
 
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
     public Message getMessage() {
         return message;
-    }
-
-    public void read(final MessageHeader header, final ByteBuffer buffer) {
-        status = message.read(header, buffer) ? Status.OK : Status.ERROR;
-    }
-
-    public boolean isValid() {
-        return status == Status.OK;
     }
 }

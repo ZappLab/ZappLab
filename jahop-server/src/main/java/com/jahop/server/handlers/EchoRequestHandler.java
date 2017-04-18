@@ -4,13 +4,14 @@ import com.google.protobuf.TextFormat;
 import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageFactory;
 import com.jahop.common.msg.proto.Messages;
-import com.jahop.server.Source;
+import com.jahop.server.connectors.Source;
+import com.jahop.server.connectors.Connectors;
 
 public class EchoRequestHandler extends AbstractRequestHandler {
     private long revision = 0;
 
-    public EchoRequestHandler(MessageFactory messageFactory) {
-        super(messageFactory);
+    public EchoRequestHandler(final Connectors connectors, final MessageFactory messageFactory) {
+        super(connectors, messageFactory);
     }
 
     @Override

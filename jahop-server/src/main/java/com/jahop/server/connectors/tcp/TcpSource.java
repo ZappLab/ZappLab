@@ -1,10 +1,10 @@
 package com.jahop.server.connectors.tcp;
 
 import com.jahop.common.msg.Message;
-import com.jahop.server.Connector;
+import com.jahop.server.connectors.Connector;
 import com.jahop.server.Errors;
 import com.jahop.server.ServerException;
-import com.jahop.server.Source;
+import com.jahop.server.connectors.Source;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

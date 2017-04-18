@@ -1,7 +1,7 @@
 package com.jahop.server.connectors.tcp;
 
 import com.jahop.common.msg.Message;
-import com.jahop.server.Source;
+import com.jahop.server.connectors.Source;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -24,7 +24,7 @@ public class MessagesQueue {
         }
     }
 
-    public void addLast(final Source source, final Message message) {
+    public void addToSource(final Source source, final Message message) {
         synchronized (messages) {
             final Deque<Message> messages = this.messages.get(source);
             if (messages == null) {
@@ -32,6 +32,15 @@ public class MessagesQueue {
             }
             messages.addLast(message);
             sources.add(source);
+        }
+    }
+
+    public void addToAll(final Message message) {
+        synchronized (messages) {
+            this.messages.entrySet().forEach(entry -> {
+                entry.getValue().addLast(message);
+                sources.add(entry.getKey());
+            });
         }
     }
 

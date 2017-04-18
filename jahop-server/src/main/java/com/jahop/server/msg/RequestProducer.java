@@ -1,7 +1,8 @@
 package com.jahop.server.msg;
 
+import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageHeader;
-import com.jahop.server.Source;
+import com.jahop.server.connectors.Source;
 import com.lmax.disruptor.RingBuffer;
 
 import java.nio.ByteBuffer;
@@ -17,8 +18,10 @@ public class RequestProducer {
         final long sequence = ringBuffer.next();
         try {
             final Request request = ringBuffer.get(sequence);
+            final Message message = request.getMessage();
+            final boolean valid = message.read(header, buffer);
             request.setSource(source);
-            request.read(header, buffer);
+            request.setValid(valid);
         } finally {
             ringBuffer.publish(sequence);
         }

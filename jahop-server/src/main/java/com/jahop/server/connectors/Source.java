@@ -1,4 +1,4 @@
-package com.jahop.server;
+package com.jahop.server.connectors;
 
 import com.jahop.common.msg.Message;
 

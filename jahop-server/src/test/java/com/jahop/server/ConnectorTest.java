@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.jahop.common.msg.Message;
 import com.jahop.common.msg.MessageFactory;
 import com.jahop.common.util.Sequencer;
+import com.jahop.server.connectors.Connector;
 import com.jahop.server.connectors.tcp.TcpConnector;
 import com.jahop.server.msg.Request;
 import com.jahop.server.msg.RequestFactory;
@@ -53,8 +54,7 @@ public class ConnectorTest {
         disruptor.handleEventsWith(eventHandler);
         disruptor.start();
 
-        connector = new TcpConnector(serverAddress.getPort());
-        connector.setProducer(new RequestProducer(disruptor.getRingBuffer()));
+        connector = new TcpConnector(serverAddress, new RequestProducer(disruptor.getRingBuffer()));
         connector.start();
         testTimeNs = System.nanoTime();
     }

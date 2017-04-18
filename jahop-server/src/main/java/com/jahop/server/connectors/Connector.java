@@ -1,7 +1,6 @@
-package com.jahop.server;
+package com.jahop.server.connectors;
 
 import com.jahop.common.msg.Message;
-import com.jahop.server.msg.RequestProducer;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,7 +9,7 @@ public interface Connector {
 
     void stop();
 
-    void setProducer(RequestProducer producer);
-
     void send(final Source source, final Message message);
+
+    void send(final Message message);
 }
