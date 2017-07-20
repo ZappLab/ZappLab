@@ -27,16 +27,18 @@ public final class MessageHeader {
         return version;
     }
 
-    public void setVersion(byte version) {
+    public MessageHeader setVersion(byte version) {
         this.version = version;
+        return this;
     }
 
     public byte getType() {
         return type;
     }
 
-    public void setType(byte type) {
+    public MessageHeader setType(byte type) {
         this.type = type;
+        return this;
     }
 
     public int getMessageSize() {
@@ -47,32 +49,36 @@ public final class MessageHeader {
         return bodySize;
     }
 
-    public void setBodySize(int bodySize) {
+    public MessageHeader setBodySize(int bodySize) {
         this.bodySize = bodySize;
+        return this;
     }
 
     public int getSourceId() {
         return sourceId;
     }
 
-    public void setSourceId(int sourceId) {
+    public MessageHeader setSourceId(int sourceId) {
         this.sourceId = sourceId;
+        return this;
     }
 
     public long getSeqNo() {
         return seqNo;
     }
 
-    public void setSeqNo(long seqNo) {
+    public MessageHeader setSeqNo(long seqNo) {
         this.seqNo = seqNo;
+        return this;
     }
 
     public long getTimestampMs() {
         return timestampMs;
     }
 
-    public void setTimestampMs(long timestampMs) {
+    public MessageHeader setTimestampMs(long timestampMs) {
         this.timestampMs = timestampMs;
+        return this;
     }
 
     void copyFrom(final MessageHeader source) {

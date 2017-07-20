@@ -16,11 +16,11 @@ public abstract class AbstractRequestHandler implements EventHandler<Request> {
     private static final Messages.Update.Builder builder = Messages.Update.newBuilder();
     protected final Logger log = LogManager.getLogger(AbstractRequestHandler.class);
     protected final Connectors connectors;
-    protected final MessageFactory messageFactory;
+    protected final MessageProvider messageProvider;
 
-    public AbstractRequestHandler(Connectors connectors, MessageFactory messageFactory) {
+    public AbstractRequestHandler(Connectors connectors, MessageProvider messageProvider) {
         this.connectors = connectors;
-        this.messageFactory = messageFactory;
+        this.messageProvider = messageProvider;
     }
 
     public final void onEvent(final Request event, final long sequence, final boolean endOfBatch) {
@@ -63,7 +63,7 @@ public abstract class AbstractRequestHandler implements EventHandler<Request> {
     }
 
     protected void handleReject(final Source source, final long requestId, final int error, final String message) {
-        final Message reject = messageFactory.createReject(getRevision(), requestId, error, message);
+        final Message reject = messageProvider.createReject(getRevision(), requestId, error, message);
         source.send(reject);
     }
 

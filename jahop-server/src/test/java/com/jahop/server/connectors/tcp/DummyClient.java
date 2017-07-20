@@ -1,7 +1,7 @@
-package com.jahop.server;
+package com.jahop.server.connectors.tcp;
 
 import com.jahop.common.msg.Message;
-import com.jahop.common.msg.MessageFactory;
+import com.jahop.common.msg.MessageProvider;
 import com.jahop.common.msg.MessageHeader;
 import com.jahop.common.msg.MessageType;
 import com.jahop.common.util.Sequencer;
@@ -20,25 +20,23 @@ public class DummyClient {
     private static final Logger log = LogManager.getLogger(DummyClient.class);
     private final Sequencer requestIdGenerator = new Sequencer(0);
     private final ByteBuffer buffer = ByteBuffer.allocate(Message.MAX_SIZE);
+    private final Message message = MessageProvider.allocateMessage();
     private final int sourceId;
     private final SocketAddress serverAddress;
-    private final MessageFactory messageFactory;
+    private final MessageProvider messageProvider;
     private SocketChannel socketChannel;
     private SelectionKey selectionKey;
 
     public DummyClient(final int sourceId, final SocketAddress serverAddress) {
         this.sourceId = sourceId;
         this.serverAddress = serverAddress;
-        this.messageFactory = new MessageFactory(sourceId, new Sequencer());
+        this.messageProvider = new MessageProvider(sourceId, 0);
     }
 
     public int getSourceId() {
         return sourceId;
     }
 
-    public void connect() throws IOException {
-        connect(null);
-    }
     public void connect(final Selector selector) throws IOException {
         socketChannel = SocketChannel.open(serverAddress);
         if (selector != null) {
@@ -52,15 +50,6 @@ public class DummyClient {
         selectionKey.cancel();
         socketChannel.close();
         log.info("DummyClient#{}: closed", sourceId);
-    }
-
-    public int send(final byte[] data) throws IOException {
-        int count = 0;
-        final ByteBuffer buffer = wrapPayload(data);
-        while (buffer.hasRemaining()) {
-            count += send(buffer);
-        }
-        return count;
     }
 
     public long send(final ByteBuffer... buffer) throws IOException {
@@ -78,20 +67,9 @@ public class DummyClient {
         } else {
             buffer.flip();
             buffer.mark();
-            while (buffer.hasRemaining()) {
-                final Message message = new Message();
-                final MessageHeader header = message.getHeader();
-                if (!header.read(buffer) || header.getType() != MessageType.PAYLOAD || header.getBodySize() > buffer.remaining()) {
-                    break;
-                }
-                message.setPartBytes(new byte[header.getBodySize() - Message.PAYLOAD_HEADER_SIZE]);
-                if (message.readBody(buffer)) {
-                    consumer.accept(message);
-                } else {
-                    close();
-                    throw new IllegalStateException("Failed to parse message. Closing connection.");
-                }
+            while (message.read(buffer)) {
                 buffer.mark();
+                consumer.accept(message);
             }
             buffer.reset();
             buffer.compact();
@@ -100,7 +78,7 @@ public class DummyClient {
     }
 
     ByteBuffer wrapPayload(final byte[] data) {
-        final Message message = messageFactory.createPayload(0, requestIdGenerator.next(), data);
+        final Message message = messageProvider.createPayload(0, requestIdGenerator.next(), data);
         final ByteBuffer buffer = ByteBuffer.allocate(message.getHeader().getMessageSize());
         message.write(buffer);
         buffer.flip();

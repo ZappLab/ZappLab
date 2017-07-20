@@ -14,6 +14,8 @@ import static com.jahop.common.util.ByteUtils.*;
  */
 public final class Message {
     public static final int MAX_SIZE = 1 << 16;     // 64k
+    public static final int ACK_SIZE = 8;
+    public static final int HEARTBEAT_SIZE = 8;
     public static final int REJECT_HEADER_SIZE = 24;
     public static final int PAYLOAD_HEADER_SIZE = 24;
     public static final int PAYLOAD_MAX_PART_SIZE = MAX_SIZE - (MessageHeader.SIZE + PAYLOAD_HEADER_SIZE);
@@ -43,80 +45,90 @@ public final class Message {
         return revision;
     }
 
-    public void setRevision(long revision) {
+    public Message setRevision(long revision) {
         this.revision = revision;
+        return this;
     }
 
     public long getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(long requestId) {
+    public Message setRequestId(long requestId) {
         this.requestId = requestId;
+        return this;
     }
 
     public int getError() {
         return error;
     }
 
-    public void setError(int error) {
+    public Message setError(int error) {
         this.error = error;
+        return this;
     }
 
     public String getDetails() {
         return details;
     }
 
-    public void setDetails(String details) {
+    public Message setDetails(String details) {
         this.details = details;
+        return this;
     }
 
     public int getPartsCount() {
         return partsCount;
     }
 
-    public void setPartsCount(int partsCount) {
+    public Message setPartsCount(int partsCount) {
         this.partsCount = partsCount;
+        return this;
     }
 
     public int getPartNo() {
         return partNo;
     }
 
-    public void setPartNo(int partNo) {
+    public Message setPartNo(int partNo) {
         this.partNo = partNo;
+        return this;
     }
 
     public int getPayloadSize() {
         return payloadSize;
     }
 
-    public void setPayloadSize(int payloadSize) {
+    public Message setPayloadSize(int payloadSize) {
         this.payloadSize = payloadSize;
+        return this;
     }
 
     public byte[] getPartBytes() {
         return partBytes;
     }
 
-    public void setPartBytes(byte[] partBytes) {
+    public Message setPartBytes(byte[] partBytes) {
         this.partBytes = partBytes;
+        return this;
     }
 
     public int getPartOffset() {
         return partOffset;
     }
 
-    public void setPartOffset(int partOffset) {
+    public Message setPartOffset(int partOffset) {
         this.partOffset = partOffset;
+        return this;
     }
 
     public int getPartLength() {
         return partLength;
     }
 
-    public void setPartLength(int partLength) {
+    public Message setPartLength(int partLength) {
         this.partLength = partLength;
+        return this;
     }
 
     public final boolean read(final ByteBuffer buffer) {

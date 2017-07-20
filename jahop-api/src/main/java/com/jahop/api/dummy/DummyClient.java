@@ -9,6 +9,11 @@ public class DummyClient implements Client {
     }
 
     @Override
+    public int getSourceId() {
+        return 0;
+    }
+
+    @Override
     public void start() {
     }
 

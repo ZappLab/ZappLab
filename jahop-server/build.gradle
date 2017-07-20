@@ -63,4 +63,5 @@ dependencies {
     compile("com.lmax:disruptor:3.3.4")
     compile("io.netty:netty-all:4.1.8.Final")
     testCompile("junit:junit")
+    testCompile project(":jahop-api")
 }

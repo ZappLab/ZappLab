@@ -20,6 +20,7 @@
     <orderEntry type="library" name="Gradle: com.lmax:disruptor:3.3.4" level="project" />
     <orderEntry type="library" name="Gradle: io.netty:netty-all:4.1.8.Final" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="module" module-name="jahop-api_main" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.2.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.5.2.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-validator:5.3.4.Final" level="project" />

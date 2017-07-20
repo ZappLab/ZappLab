@@ -1,8 +1,7 @@
 package com.jahop.server;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.jahop.common.msg.MessageFactory;
-import com.jahop.common.util.Sequencer;
+import com.jahop.common.msg.MessageProvider;
 import com.jahop.server.connectors.Connectors;
 import com.jahop.server.connectors.tcp.TcpConnector;
 import com.jahop.server.handlers.EchoRequestHandler;
@@ -36,13 +35,13 @@ public class ServerBootstrap {
 
     @PostConstruct
     public void start() throws IOException {
-        final MessageFactory messageFactory = new MessageFactory(SOURCE_ID, new Sequencer());
+        final MessageProvider messageProvider = new MessageProvider(SOURCE_ID, System.currentTimeMillis());
 
         disruptor = new Disruptor<>(new RequestFactory(), 1024, workerThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
 
         final RequestProducer producer = new RequestProducer(disruptor.getRingBuffer());
         connectors = new Connectors(new TcpConnector(9090, producer));
-        disruptor.handleEventsWith(new EchoRequestHandler(connectors, messageFactory));
+        disruptor.handleEventsWith(new EchoRequestHandler(connectors, messageProvider));
 
         disruptor.start();
         connectors.start();

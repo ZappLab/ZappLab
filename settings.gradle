@@ -1,4 +1,6 @@
 //rootProject.name = 'jahop'
-include "jahop-api", "jahop-common", "jahop-server"
+include 'jahop-api'
+include 'jahop-common'
+include 'jahop-server'
 include 'jahop-console'
 

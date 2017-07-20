@@ -5,7 +5,7 @@ import com.google.protobuf.GeneratedMessage;
 import com.jahop.api.Client;
 import com.jahop.api.ResponseHandler;
 import com.jahop.common.msg.Message;
-import com.jahop.common.msg.MessageFactory;
+import com.jahop.common.msg.MessageProvider;
 import com.jahop.common.util.Sequencer;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -22,7 +22,7 @@ public class TcpClient implements Client {
     private final Sequencer requestIdSequencer = new Sequencer();
     private final SocketAddress serverAddress;
     private final int sourceId;
-    private final MessageFactory messageFactory;
+    private final MessageProvider messageProvider;
     private int ringBufferSize = 1024;           // Specify the size of the request ring buffer, must be power of 2.
     private Disruptor<Message> disruptor;
     private TcpReactorLoop reactorLoop;
@@ -30,17 +30,23 @@ public class TcpClient implements Client {
     public TcpClient(final SocketAddress serverAddress, final int sourceId) {
         this.serverAddress = serverAddress;
         this.sourceId = sourceId;
-        this.messageFactory = new MessageFactory(sourceId, new Sequencer());
+        this.messageProvider = new MessageProvider(sourceId, System.currentTimeMillis());
     }
 
+    @SuppressWarnings("unused")
     public void setRingBufferSize(int ringBufferSize) {
         this.ringBufferSize = ringBufferSize;
     }
 
     @Override
+    public int getSourceId() {
+        return sourceId;
+    }
+
+    @Override
     public void start() {
         // start event handler thread
-        disruptor = new Disruptor<>(MessageFactory::allocateMessage, ringBufferSize, workerThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
+        disruptor = new Disruptor<>(MessageProvider::allocateMessage, ringBufferSize, workerThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
         disruptor.handleEventsWith(new ResponseHandler());
         disruptor.start();
 
@@ -60,7 +66,7 @@ public class TcpClient implements Client {
 
     @Override
     public void send(final GeneratedMessage message) {
-        final Message payload = messageFactory.createPayload(0, requestIdSequencer.next(), message.toByteArray());
+        final Message payload = messageProvider.createPayload(0, requestIdSequencer.next(), message.toByteArray());
         reactorLoop.send(payload);
         log.info("Sent: {}", payload);
     }
